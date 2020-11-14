@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "433170003654",
+    "firebase_url": "https://nomadweather-8afb4.firebaseio.com",
+    "project_id": "nomadweather-8afb4",
+    "storage_bucket": "nomadweather-8afb4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433170003654:android:f8f8aef37e58606304c9c7",
+        "android_client_info": {
+          "package_name": "com.example.nomadfinal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433170003654-n0rhgdv90vbhmksmrv6e9rot5p4vqoib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNRJ4bALvsZY5dxJ8u8qIalN2mDEzHoLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433170003654-n0rhgdv90vbhmksmrv6e9rot5p4vqoib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
