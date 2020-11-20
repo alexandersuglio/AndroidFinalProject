@@ -1,0 +1,21 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.myapplication.MainActivity">
+
+    <item
+        android:id="@+id/signOUT"
+        android:orderInCategory="100"
+        android:title="@string/sign_out"
+        app:showAsAction="always" />
+
+</menu>
+
+<!--<menu xmlns:android="http://schemas.android.com/apk/res/android" >-->
+<!--    <item-->
+<!--        android:id="@+id/action_cart"-->
+<!--        android:icon="@drawable/cart"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:showAsAction="always"/>-->
+<!--</menu>-->
