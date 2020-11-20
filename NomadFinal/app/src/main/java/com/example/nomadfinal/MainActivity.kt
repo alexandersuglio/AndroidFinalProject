@@ -241,7 +241,7 @@ class MainActivity : AppCompatActivity() {
         if (id == R.id.signOUT) {
             // do something here
 
-            Log.d("idk", "you fucking clicked me!")
+            Log.d("idk", "you definitely clicked me!")
 
             AuthUI.getInstance().signOut(this).addOnCompleteListener {
 
