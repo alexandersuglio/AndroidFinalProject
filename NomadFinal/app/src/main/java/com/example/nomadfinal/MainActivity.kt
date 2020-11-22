@@ -206,13 +206,13 @@ class MainActivity : AppCompatActivity() {
         ///////DEERAJ//////
 
 
-        val languages = resources.getStringArray(R.array.Languages)
+        val times = resources.getStringArray(R.array.Times)
 
         // access the spinner
-        val spinner = findViewById<Spinner>(R.id.spinner)
+        val spinner = findViewById<Spinner>(R.id.spinner1)
         if (spinner != null)
         {
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, languages)
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, times)
 
             spinner.adapter = adapter
 
@@ -221,6 +221,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long)
                 {
                     //  Toast.makeText(this@MainActivity, getString(R.string.selected_item) + " " + "" + languages[position], Toast.LENGTH_SHORT).show()
+                    Log.d("timePick", times[position])
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
@@ -228,7 +229,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        
+
 
         val dateFormat1: DateFormat = SimpleDateFormat("MM-dd-yyyy")
         var idk1 = dateFormat1.format(Date())

@@ -11,7 +11,7 @@
 
     <string name="selected_item">Selected item:</string>
 
-    <string-array name="Languages">
+    <string-array name="Times">
         <item>00:00</item>
         <item>00:30</item>
         <item>01:00</item>
