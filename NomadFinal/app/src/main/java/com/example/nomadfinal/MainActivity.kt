@@ -9,6 +9,7 @@ import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -19,10 +20,17 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.lang.Exception
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.system.measureTimeMillis
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private var checkPoint = 1
     private lateinit var geocoder: Geocoder
     private lateinit var location: Address
+    private lateinit var travelTime: String
 
     private val RC_SIGN_IN = 123 // some arbitrary code
     private var currentEmail = ""
@@ -70,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 //
 //        }
 
-        ///////DEERAJ////////
+        /////DEERAJ/////----------------------------From
 
         val addBut = findViewById<Button>(R.id.addCheckPoint)
         val remBut = findViewById<Button>(R.id.removeCheckPoint)
@@ -152,58 +161,59 @@ class MainActivity : AppCompatActivity() {
 
         geocoder = Geocoder(this)
 
-        var lat = 0.00
-        var long = 0.00
+        var start_lat = 0.00
+        var start_long = 0.00
+        var end_lat = 0.00
+        var end_long = 0.00
 
         submitBut.setOnClickListener {
-            if (!startPoint.text.isNullOrEmpty()) {
-                try {
+            if(!startPoint.text.isNullOrEmpty() && !endPoint.text.isNullOrEmpty()){
+                try{
                     location = geocoder.getFromLocationName(startPoint.text.toString(), 1).get(0)
-                    if (location != null) {
-                        lat = location.latitude
-                        long = location.longitude
+                    if(location != null){
+                        start_lat = location.latitude
+                        start_long = location.longitude
 
+
+
+                        location = geocoder.getFromLocationName(endPoint.text.toString(), 1).get(0)
+
+                        if(location != null){
+                            end_lat = location.latitude
+                            end_long = location.longitude
+                            CoroutineScope(IO).launch {
+                                if(checkCountry(start_lat,start_long) == true && checkCountry(end_lat, end_long) == true) {
+                                    mapApiRequest(start_lat, start_long, end_lat, end_long)
+                                }
+                                else{
+                                    Looper.prepare() // to be able to make toast
+                                    Toast.makeText(this@MainActivity, "Road trip within the US only!", Toast.LENGTH_LONG).show()
+                                    Looper.loop()
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Toast.makeText(this, "End Point is not Valid!", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                } catch (e: Exception) {
+                    else
+                    {
+                        Toast.makeText(this, "Start Point is not Valid!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                catch (e: Exception){
                     Toast.makeText(this, "Please enter a valid Address!", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(this, "Address is blank!", Toast.LENGTH_SHORT).show()
             }
-
-
-//            if(lat!=0.00 && long!=0.00){
-//
-//                var background = object : Thread() {
-//
-//                     var url = "https://api.openweathermap.org/data/2.5/onecall?" + "appid=09f73a1fbf8932c02e6b56a252ac594f" + "lat=" + lat + "long=" + long
-//
-//                    Request(url).run()
-//                }.start()
-//
-//
-//            }
-
-            if (lat != 0.00 && long != 0.00) {
-
-                object : Thread() {
-
-                    var url = "https://api.openweathermap.org/data/2.5/onecall?" + "lat=" + lat + "&lon=" + long + "&appid=09f73a1fbf8932c02e6b56a252ac594f"
-
-                    override fun run() {
-                        Request(url).run()
-                    }
-
-                }.start()
-
-//                var url = "https://api.openweathermap.org/data/2.5/onecall?" + "lat=" + lat + "&lon=" + long + "&appid=09f73a1fbf8932c02e6b56a252ac594f"
-//                Request(url).run()
-
+            else
+            {
+                Toast.makeText(this, "Address is blank!", Toast.LENGTH_SHORT).show()
             }
         }
 
 
-        ///////DEERAJ//////
+        /////DEERAJ/////----------------------------To
 
 
         val times = resources.getStringArray(R.array.Times)
@@ -276,6 +286,67 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    /////DEERAJ/////----------------------------From
+
+    private suspend fun mapApiRequest(s_lat: Double, s_long: Double, e_lat: Double, e_long: Double) {
+
+        withContext(IO){
+
+            val job = launch {
+                val time = measureTimeMillis {
+                    try{
+                        val result = JSONObject(getTravelTime(s_lat, s_long, e_lat, e_long).optString("route")).optString("formattedTime")
+                        travelTime = result
+                        val f = ""
+                    }
+                    catch (e: java.lang.Exception){
+                        Looper.prepare() // to be able to make toast
+                        Toast.makeText(this@MainActivity, "Road trip not possible!", Toast.LENGTH_LONG).show()
+                        Looper.loop()
+                    }
+                    if(travelTime == ""){
+                        Looper.prepare() // to be able to make toast
+                        Toast.makeText(this@MainActivity, "Road trip not possible!", Toast.LENGTH_LONG).show()
+                        Looper.loop()
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun checkCountry(lat: Double, long: Double):Boolean{
+        var check = false
+        withContext(IO){
+
+            val job = launch {
+                val time = measureTimeMillis {
+                    var result = ""
+                    try{
+                        result = getCountryName(lat, long).optString("countryCode")
+                    }
+                    catch (e: java.lang.Exception) {
+
+                    }
+
+                    if(result == "US") {
+                        check = true
+                    }
+                }
+            }
+        }
+        return check
+    }
+
+    private suspend fun getTravelTime(s_lat:Double, s_long: Double, e_lat: Double, e_long: Double): JSONObject {
+        return JSONObject(Request("http://www.mapquestapi.com/directions/v2/route?key=A4UUgYYVFNvhyO0HK2vJWPAjjBYHTsGv&from=$s_lat,$s_long&to=$e_lat,$e_long").run().toString())
+    }
+
+    private suspend fun getCountryName(lat:Double, long:Double): JSONObject {
+        return JSONObject(Request("http://api.geonames.org/countryCodeJSON?lat=$lat&lng=$long&username=asuglio").run().toString())
+    }
+
+    /////DEERAJ/////------------------------------------To
 
 
 //    private fun formatTV(name: String, email: String): String {
