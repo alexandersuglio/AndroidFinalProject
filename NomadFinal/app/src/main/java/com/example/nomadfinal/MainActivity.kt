@@ -22,8 +22,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.lang.Exception
 import java.text.DateFormat
@@ -323,10 +322,9 @@ class MainActivity : AppCompatActivity() {
                 val time = measureTimeMillis {
                     var result = ""
                     try{
-                        result = getCountryName(lat, long).optString("countryCode")
+                        result = getCountryName(lat, long).getString("countryCode")
                     }
-                    catch (e: java.lang.Exception) {
-
+                    catch (e: Exception) {
                     }
 
                     if(result == "US") {
@@ -339,11 +337,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun getTravelTime(s_lat:Double, s_long: Double, e_lat: Double, e_long: Double): JSONObject {
-        return JSONObject(Request("http://www.mapquestapi.com/directions/v2/route?key=A4UUgYYVFNvhyO0HK2vJWPAjjBYHTsGv&from=$s_lat,$s_long&to=$e_lat,$e_long").run().toString())
+        return JSONObject(Request("http://www.mapquestapi.com/directions/v2/route?key=A4UUgYYVFNvhyO0HK2vJWPAjjBYHTsGv&from=$s_lat,$s_long&to=$e_lat,$e_long").run())
     }
 
     private suspend fun getCountryName(lat:Double, long:Double): JSONObject {
-        return JSONObject(Request("http://api.geonames.org/countryCodeJSON?lat=$lat&lng=$long&username=asuglio").run().toString())
+        return JSONObject(Request("http://api.geonames.org/countryCodeJSON?lat=$lat&lng=$long&username=asuglio").run())
     }
 
     /////DEERAJ/////------------------------------------To
@@ -381,7 +379,6 @@ class MainActivity : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
                 finish()
-
             }
 
         }
