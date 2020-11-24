@@ -4,6 +4,7 @@ package com.example.nomadfinal
 //import com.example.nomadfinal.data.*
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.location.Address
@@ -20,13 +21,16 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.lang.Exception
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.system.measureTimeMillis
@@ -44,10 +48,15 @@ class MainActivity : AppCompatActivity() {
     private var checkPoint = 1
     private lateinit var geocoder: Geocoder
     private lateinit var location: Address
+    private lateinit var location1: MutableList<Address>
+    private lateinit var locationLat: MutableList<Double>
+    private lateinit var locationLong: MutableList<Double>
+    private lateinit var timeStamp: MutableList<Long>
     private lateinit var travelTime: String
 
     private val RC_SIGN_IN = 123 // some arbitrary code
     private var currentEmail = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +99,10 @@ class MainActivity : AppCompatActivity() {
         val submitBut = findViewById<Button>(R.id.btnSubmit)
         val startPoint = findViewById<TextInputEditText>(R.id.startText)
         val endPoint = findViewById<TextInputEditText>(R.id.endText)
+        val departTime = findViewById<Spinner>(R.id.spinner1)
+        val departDate = findViewById<Spinner>(R.id.spinner2)
+
+        var locationList = listOf(check1, check2, check3, check4, check5)
 
         addBut.setOnClickListener {
             when (checkPoint) {
@@ -166,30 +179,64 @@ class MainActivity : AppCompatActivity() {
         var end_long = 0.00
 
         submitBut.setOnClickListener {
+            val dT = departTime.selectedItem
+            val dD = departDate.selectedItem
+            val epoch = SimpleDateFormat("MM-dd-yyyy HH:mm:ss").parse("$dD $dT:00").time / 1000
+
+            //timeStamp.add(epoch)
+
+            //location1.add()
+
+//            if(!startPoint.text.isNullOrEmpty() && !endPoint.text.isNullOrEmpty()){
+//                try{
+//                    location = geocoder.getFromLocationName(startPoint.text.toString(), 1).get(0)
+//                    if(location != null){
+//                        start_lat = location.latitude
+//                        start_long = location.longitude
+//
+//
+//
+//                        location = geocoder.getFromLocationName(endPoint.text.toString(), 1).get(0)
+//
+//                        if(location != null){
+//                            end_lat = location.latitude
+//                            end_long = location.longitude
+//                            CoroutineScope(IO).launch {
+//                                if(checkCountry(start_lat, start_long) == true && checkCountry(end_lat, end_long) == true) {
+//                                    mapApiRequest(start_lat, start_long, end_lat, end_long)
+//                                }
+//                                else{
+//                                    Looper.prepare() // to be able to make toast
+//                                    Toast.makeText(this@MainActivity, "Road trip within the US only!", Toast.LENGTH_LONG).show()
+//                                    Looper.loop()
+//                                }
+//                            }
+//                        }
+//                        else
+//                        {
+//                            Toast.makeText(this, "End Point is not Valid!", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                    else
+//                    {
+//                        Toast.makeText(this, "Start Point is not Valid!", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//                catch (e: Exception){
+//                    Toast.makeText(this, "Please enter a valid Address!", Toast.LENGTH_SHORT).show()
+//                }
+//            }
             if(!startPoint.text.isNullOrEmpty() && !endPoint.text.isNullOrEmpty()){
                 try{
                     location = geocoder.getFromLocationName(startPoint.text.toString(), 1).get(0)
                     if(location != null){
-                        start_lat = location.latitude
-                        start_long = location.longitude
 
-
+                        location1.add(location)
 
                         location = geocoder.getFromLocationName(endPoint.text.toString(), 1).get(0)
 
                         if(location != null){
-                            end_lat = location.latitude
-                            end_long = location.longitude
-                            CoroutineScope(IO).launch {
-                                if(checkCountry(start_lat,start_long) == true && checkCountry(end_lat, end_long) == true) {
-                                    mapApiRequest(start_lat, start_long, end_lat, end_long)
-                                }
-                                else{
-                                    Looper.prepare() // to be able to make toast
-                                    Toast.makeText(this@MainActivity, "Road trip within the US only!", Toast.LENGTH_LONG).show()
-                                    Looper.loop()
-                                }
-                            }
+                            location1.add(location)
                         }
                         else
                         {
@@ -204,11 +251,76 @@ class MainActivity : AppCompatActivity() {
                 catch (e: Exception){
                     Toast.makeText(this, "Please enter a valid Address!", Toast.LENGTH_SHORT).show()
                 }
+
             }
             else
             {
                 Toast.makeText(this, "Address is blank!", Toast.LENGTH_SHORT).show()
             }
+
+            for(i in 1 until checkPoint){
+                if(locationList[i-1].editText.toString().isNotEmpty()){
+                    try{
+                        location = geocoder.getFromLocationName(locationList[i-1].editText.toString(), 1).get(0)
+                        if(location != null){
+                            location1.add(location)
+                        }
+                        else{
+                            Toast.makeText(this, "Please enter a valid Address!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    catch(e: Exception){
+                        Toast.makeText(this, "Please enter a valid Address!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                else{
+                    Toast.makeText(this, "Address is blank!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            if(location1.size != checkPoint+1){
+                Toast.makeText(this, "One or more addresses are Invalid!", Toast.LENGTH_SHORT).show()
+            }
+
+            else{
+                var checkUSA = 0
+                for(item in location1){
+                    locationLat.add(item.latitude)
+                    locationLong.add(item.longitude)
+                    CoroutineScope(IO).launch {
+                        if(!checkCountry(item.latitude, item.longitude)){
+                            checkUSA++
+                        }
+                    }
+                }
+                if(checkUSA != 0){
+                    Toast.makeText(this, "Road trip within the US only!", Toast.LENGTH_LONG).show()
+                }
+                else{
+                    var checkTravelTime = 0
+                    for(i in 1 .. checkPoint){
+                        CoroutineScope(IO).launch {
+                            if(!mapApiRequest(locationLat[i-1], locationLong[i-1], locationLat[i], locationLong[i]))
+                            {
+                                checkTravelTime++
+                            }
+                        }
+                    }
+
+                    if(checkTravelTime !=0){
+                        Toast.makeText(this, "Road trip not possible!", Toast.LENGTH_LONG).show()
+                    }
+                    else{
+
+                    }
+                }
+            }
+
+
+
+
+
+
         }
 
 
@@ -218,14 +330,14 @@ class MainActivity : AppCompatActivity() {
         val times = resources.getStringArray(R.array.Times)
 
         // access the spinner
-        val spinner = findViewById<Spinner>(R.id.spinner1)
-        if (spinner != null)
+        //val spinner = findViewById<Spinner>(R.id.spinner1)
+        if (spinner1 != null)
         {
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, times)
 
-            spinner.adapter = adapter
+            spinner1.adapter = adapter
 
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+            spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
             {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long)
                 {
@@ -268,7 +380,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerArray)
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        val sItems = findViewById<View>(R.id.spinner2) as Spinner
+        val sItems = spinner2 as Spinner
         sItems.adapter = adapter
 
         sItems.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
@@ -288,36 +400,41 @@ class MainActivity : AppCompatActivity() {
 
     /////DEERAJ/////----------------------------From
 
-    private suspend fun mapApiRequest(s_lat: Double, s_long: Double, e_lat: Double, e_long: Double) {
-
+    private suspend fun mapApiRequest(s_lat: Double, s_long: Double, e_lat: Double, e_long: Double): Boolean {
+        var check = true
         withContext(IO){
-
             val job = launch {
                 val time = measureTimeMillis {
                     try{
                         val result = JSONObject(getTravelTime(s_lat, s_long, e_lat, e_long).optString("route")).optString("formattedTime")
                         travelTime = result
-                        val f = ""
                     }
                     catch (e: java.lang.Exception){
                         Looper.prepare() // to be able to make toast
                         Toast.makeText(this@MainActivity, "Road trip not possible!", Toast.LENGTH_LONG).show()
                         Looper.loop()
+                        check = false
                     }
                     if(travelTime == ""){
                         Looper.prepare() // to be able to make toast
                         Toast.makeText(this@MainActivity, "Road trip not possible!", Toast.LENGTH_LONG).show()
                         Looper.loop()
+                        check = false
+                    }
+                    else{
+                        val previousTime = (1606312800.toLong())
+                        val date = Date(previousTime * 1000)
+                        val x = date
                     }
                 }
             }
         }
+        return check
     }
 
     private suspend fun checkCountry(lat: Double, long: Double):Boolean{
         var check = false
         withContext(IO){
-
             val job = launch {
                 val time = measureTimeMillis {
                     var result = ""
@@ -326,7 +443,6 @@ class MainActivity : AppCompatActivity() {
                     }
                     catch (e: Exception) {
                     }
-
                     if(result == "US") {
                         check = true
                     }
@@ -336,12 +452,16 @@ class MainActivity : AppCompatActivity() {
         return check
     }
 
-    private suspend fun getTravelTime(s_lat:Double, s_long: Double, e_lat: Double, e_long: Double): JSONObject {
+    private suspend fun getTravelTime(s_lat: Double, s_long: Double, e_lat: Double, e_long: Double): JSONObject {
         return JSONObject(Request("http://www.mapquestapi.com/directions/v2/route?key=A4UUgYYVFNvhyO0HK2vJWPAjjBYHTsGv&from=$s_lat,$s_long&to=$e_lat,$e_long").run())
     }
 
-    private suspend fun getCountryName(lat:Double, long:Double): JSONObject {
+    private suspend fun getCountryName(lat: Double, long: Double): JSONObject {
         return JSONObject(Request("http://api.geonames.org/countryCodeJSON?lat=$lat&lng=$long&username=asuglio").run())
+    }
+
+    private suspend fun getWeatherInfo(lat: Double, long: Double): JSONObject {
+        return JSONObject(Request("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$long&appid=09f73a1fbf8932c02e6b56a252ac594f").run())
     }
 
     /////DEERAJ/////------------------------------------To
