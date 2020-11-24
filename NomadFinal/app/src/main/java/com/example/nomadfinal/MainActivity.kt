@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.text.DateFormat
@@ -287,10 +288,14 @@ class MainActivity : AppCompatActivity() {
                 for(item in location1){
                     locationLat.add(item.latitude)
                     locationLong.add(item.longitude)
-                    CoroutineScope(IO).launch {
+                    val job1 = CoroutineScope(IO).launch {
                         if(!checkCountry(item.latitude, item.longitude)){
                             checkUSA++
                         }
+                    }
+
+                    runBlocking{
+                        job1.join()
                     }
                 }
                 if(checkUSA != 0){
@@ -299,11 +304,15 @@ class MainActivity : AppCompatActivity() {
                 else{
                     var checkTravelTime = 0
                     for(i in 1 .. checkPoint){
-                        CoroutineScope(IO).launch {
+                        val job2 = CoroutineScope(IO).launch {
                             if(!mapApiRequest(locationLat[i-1], locationLong[i-1], locationLat[i], locationLong[i]))
                             {
                                 checkTravelTime++
                             }
+                        }
+
+                        runBlocking{
+                            job2.join()
                         }
                     }
 
@@ -311,12 +320,12 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, "Road trip not possible!", Toast.LENGTH_LONG).show()
                     }
                     else{
-                        val x = timeStamp
+                        //val x = timeStamp
 
-                        Toast.makeText(this@MainActivity, "after"+timeStamp.size.toString(), Toast.LENGTH_LONG).show()
+                        //Toast.makeText(this@MainActivity, "after"+timeStamp.size.toString(), Toast.LENGTH_LONG).show()
 
 
-                        //Toast.makeText(this, timeStamp[1].toString(), Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(this, "after"+timeStamp[1].toString(), Toast.LENGTH_SHORT).show()
 
                     }
                 }
@@ -440,9 +449,9 @@ class MainActivity : AppCompatActivity() {
 
                         timeStamp.add(newTime)
 
-                        Looper.prepare() // to be able to make toast
-                        Toast.makeText(this@MainActivity, "before"+timeStamp.size.toString(), Toast.LENGTH_SHORT).show()
-                        Looper.loop()
+//                        Looper.prepare() // to be able to make toast
+//                        Toast.makeText(this@MainActivity, "before"+timeStamp.size.toString(), Toast.LENGTH_SHORT).show()
+//                        Looper.loop()
 
 //                        if(timeStamp.size == 2)
 //                        {
