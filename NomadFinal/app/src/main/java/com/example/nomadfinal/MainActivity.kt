@@ -48,10 +48,10 @@ class MainActivity : AppCompatActivity() {
     private var checkPoint = 1
     private lateinit var geocoder: Geocoder
     private lateinit var location: Address
-    private lateinit var location1: MutableList<Address>
-    private lateinit var locationLat: MutableList<Double>
-    private lateinit var locationLong: MutableList<Double>
-    private lateinit var timeStamp: MutableList<Long>
+    private var location1: MutableList<Address> = mutableListOf()
+    private var locationLat: MutableList<Double> = mutableListOf()
+    private var locationLong: MutableList<Double> = mutableListOf()
+    private var timeStamp: MutableList<Long>  = mutableListOf()
     private lateinit var travelTime: String
 
     private val RC_SIGN_IN = 123 // some arbitrary code
@@ -173,17 +173,17 @@ class MainActivity : AppCompatActivity() {
 
         geocoder = Geocoder(this)
 
-        var start_lat = 0.00
-        var start_long = 0.00
-        var end_lat = 0.00
-        var end_long = 0.00
+//        var start_lat = 0.00
+//        var start_long = 0.00
+//        var end_lat = 0.00
+//        var end_long = 0.00
 
         submitBut.setOnClickListener {
             val dT = departTime.selectedItem
             val dD = departDate.selectedItem
             val epoch = SimpleDateFormat("MM-dd-yyyy HH:mm:ss").parse("$dD $dT:00").time / 1000
 
-            //timeStamp.add(epoch)
+            timeStamp.add(epoch)
 
             //location1.add()
 
@@ -422,7 +422,7 @@ class MainActivity : AppCompatActivity() {
                         check = false
                     }
                     else{
-                        val previousTime = (1606312800.toLong())
+                        val previousTime = (timeStamp.last())
                         val date = Date(previousTime * 1000)
                         val x = date
                     }
