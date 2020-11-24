@@ -311,6 +311,12 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, "Road trip not possible!", Toast.LENGTH_LONG).show()
                     }
                     else{
+                        val x = timeStamp
+
+                        Toast.makeText(this@MainActivity, "after"+timeStamp.size.toString(), Toast.LENGTH_LONG).show()
+
+
+                        //Toast.makeText(this, timeStamp[1].toString(), Toast.LENGTH_SHORT).show()
 
                     }
                 }
@@ -423,8 +429,27 @@ class MainActivity : AppCompatActivity() {
                     }
                     else{
                         val previousTime = (timeStamp.last())
-                        val date = Date(previousTime * 1000)
-                        val x = date
+
+                        val hoursMin = travelTime.split(":")
+
+                        val newTime = previousTime + ((hoursMin[0].toLong()) *  60 * 60) + (hoursMin[1].toLong() * 60)
+
+//                        Looper.prepare() // to be able to make toast
+//                        Toast.makeText(this@MainActivity, timeStamp.size.toString(), Toast.LENGTH_SHORT).show()
+//                        Looper.loop()
+
+                        timeStamp.add(newTime)
+
+                        Looper.prepare() // to be able to make toast
+                        Toast.makeText(this@MainActivity, "before"+timeStamp.size.toString(), Toast.LENGTH_SHORT).show()
+                        Looper.loop()
+
+//                        if(timeStamp.size == 2)
+//                        {
+//                            Looper.prepare() // to be able to make toast
+//                            Toast.makeText(this@MainActivity, "Added second Time Stamp!", Toast.LENGTH_LONG).show()
+//                            Looper.loop()
+//                        }
                     }
                 }
             }
