@@ -92,6 +92,11 @@ class MainActivity : AppCompatActivity() {
 
         val addBut = findViewById<Button>(R.id.addCheckPoint)
         val remBut = findViewById<Button>(R.id.removeCheckPoint)
+        val check_1 = findViewById<TextInputEditText>(R.id.check_1)
+        val check_2 = findViewById<TextInputEditText>(R.id.check_2)
+        val check_3 = findViewById<TextInputEditText>(R.id.check_3)
+        val check_4 = findViewById<TextInputEditText>(R.id.check_4)
+        val check_5 = findViewById<TextInputEditText>(R.id.check_5)
         val check1 = findViewById<TextInputLayout>(R.id.check1)
         val check2 = findViewById<TextInputLayout>(R.id.check2)
         val check3 = findViewById<TextInputLayout>(R.id.check3)
@@ -103,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         val departTime = findViewById<Spinner>(R.id.spinner1)
         val departDate = findViewById<Spinner>(R.id.spinner2)
 
-        var locationList = listOf(check1, check2, check3, check4, check5)
+        var locationList = listOf(check_1, check_2, check_3, check_4, check_5)
 
         addBut.setOnClickListener {
             when (checkPoint) {
@@ -260,9 +265,40 @@ class MainActivity : AppCompatActivity() {
             }
 
             for(i in 1 until checkPoint){
-                if(locationList[i-1].editText.toString().isNotEmpty()){
+//                var locat = ""
+//
+//                when (i) {
+//                    0 -> {
+//                        locat = check1.text.toString()
+//                    }
+//                    1 -> {
+//
+//                    }
+//
+//                    2 -> {
+//
+//                    }
+//
+//                    3 -> {
+//
+//                    }
+//
+//                    4 -> {
+//
+//                    }
+//
+//                    5 -> {
+//
+//                    }
+//                }
+
+
+                if(locationList[i-1].text.toString().isNotEmpty()){
+
+                    //val d = locationList[i-1]
+                    //val dv = locationList[i-1].text.toString()
                     try{
-                        location = geocoder.getFromLocationName(locationList[i-1].editText.toString(), 1).get(0)
+                        location = geocoder.getFromLocationName(locationList[i-1].text.toString(), 1).get(0)
                         if(location != null){
                             location1.add(location)
                         }
@@ -325,7 +361,8 @@ class MainActivity : AppCompatActivity() {
                         //Toast.makeText(this@MainActivity, "after"+timeStamp.size.toString(), Toast.LENGTH_LONG).show()
 
 
-                        //Toast.makeText(this, "after"+timeStamp[1].toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "after"+timeStamp[1].toString(), Toast.LENGTH_SHORT).show()
+                        val f = ""
 
                     }
                 }

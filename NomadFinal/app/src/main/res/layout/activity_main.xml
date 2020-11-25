@@ -64,6 +64,7 @@
                 android:visibility="invisible">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/check_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -78,6 +79,7 @@
                 android:visibility="invisible">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/check_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -92,6 +94,7 @@
                 android:visibility="invisible">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/check_3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -106,6 +109,7 @@
                 android:visibility="invisible">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/check_4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -120,6 +124,7 @@
                 android:visibility="invisible">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/check_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
