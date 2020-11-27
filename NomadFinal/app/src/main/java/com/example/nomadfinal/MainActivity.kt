@@ -4,7 +4,6 @@ package com.example.nomadfinal
 //import com.example.nomadfinal.data.*
 
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.location.Address
@@ -30,8 +29,6 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.system.measureTimeMillis
@@ -68,9 +65,11 @@ class MainActivity : AppCompatActivity() {
         val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
 
         // Create and launch sign-in intent
-        startActivityForResult(AuthUI.getInstance()
+        startActivityForResult(
+            AuthUI.getInstance()
                 .createSignInIntentBuilder().setIsSmartLockEnabled(false)
-                .setAvailableProviders(providers).build(), RC_SIGN_IN)
+                .setAvailableProviders(providers).build(), RC_SIGN_IN
+        )
 
 
 //        signOut.setOnClickListener{
@@ -265,48 +264,28 @@ class MainActivity : AppCompatActivity() {
             }
 
             for(i in 1 until checkPoint){
-//                var locat = ""
-//
-//                when (i) {
-//                    0 -> {
-//                        locat = check1.text.toString()
-//                    }
-//                    1 -> {
-//
-//                    }
-//
-//                    2 -> {
-//
-//                    }
-//
-//                    3 -> {
-//
-//                    }
-//
-//                    4 -> {
-//
-//                    }
-//
-//                    5 -> {
-//
-//                    }
-//                }
-
-
-                if(locationList[i-1].text.toString().isNotEmpty()){
+                if(locationList[i - 1].text.toString().isNotEmpty()){
+                    Log.d("I am here", location1.size.toString()+"/"+checkPoint.toString())
 
                     //val d = locationList[i-1]
                     //val dv = locationList[i-1].text.toString()
                     try{
-                        location = geocoder.getFromLocationName(locationList[i-1].text.toString(), 1).get(0)
+                        location = geocoder.getFromLocationName(
+                            locationList[i - 1].text.toString(),
+                            1
+                        ).get(0)
                         if(location != null){
                             location1.add(location)
                         }
                         else{
-                            Toast.makeText(this, "Please enter a valid Address!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "Please enter a valid Address!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
-                    catch(e: Exception){
+                    catch (e: Exception){
                         Toast.makeText(this, "Please enter a valid Address!", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -316,7 +295,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             if(location1.size != checkPoint+1){
+                Log.d("error", location1.size.toString()+"/"+checkPoint.toString())
                 Toast.makeText(this, "One or more addresses are Invalid!", Toast.LENGTH_SHORT).show()
+
             }
 
             else{
@@ -341,7 +322,12 @@ class MainActivity : AppCompatActivity() {
                     var checkTravelTime = 0
                     for(i in 1 .. checkPoint){
                         val job2 = CoroutineScope(IO).launch {
-                            if(!mapApiRequest(locationLat[i-1], locationLong[i-1], locationLat[i], locationLong[i]))
+                            if(!mapApiRequest(
+                                    locationLat[i - 1],
+                                    locationLong[i - 1],
+                                    locationLat[i],
+                                    locationLong[i]
+                                ))
                             {
                                 checkTravelTime++
                             }
@@ -356,21 +342,48 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, "Road trip not possible!", Toast.LENGTH_LONG).show()
                     }
                     else{
-                        //val x = timeStamp
-
                         //Toast.makeText(this@MainActivity, "after"+timeStamp.size.toString(), Toast.LENGTH_LONG).show()
+                        //Toast.makeText(this, "after"+timeStamp[1].toString(), Toast.LENGTH_SHORT).show()
 
+                        if(!(timeStamp.size == locationLat.size && timeStamp.size == locationLong.size)){
+                            Toast.makeText(
+                                this,
+                                "Please fill the details correctly!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        else {
+                            var checkWeatherInfo = 0
+                            for(i in 0 until timeStamp.size){
+                                val job3 = CoroutineScope(IO).launch {
+                                    if(!weatherForecast(
+                                            locationLat[i],
+                                            locationLong[i],
+                                            timeStamp[i]
+                                        )){
+                                        checkWeatherInfo++
+                                    }
+                                }
+                                runBlocking{
+                                    job3.join()
+                                }
+                            }
+                            if(checkWeatherInfo!=0){
+                                Toast.makeText(
+                                    this,
+                                    "Weather Information cannot be found. Please provide future departure time!",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                            else{
 
-                        Toast.makeText(this, "after"+timeStamp[1].toString(), Toast.LENGTH_SHORT).show()
-                        val f = ""
+                                Log.d("I am here 2", location1.size.toString()+"/"+checkPoint.toString())
 
+                            }
+                        }
                     }
                 }
             }
-
-
-
-
 
 
         }
@@ -391,7 +404,12 @@ class MainActivity : AppCompatActivity() {
 
             spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
             {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long)
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View,
+                    position: Int,
+                    id: Long
+                )
                 {
                     //  Toast.makeText(this@MainActivity, getString(R.string.selected_item) + " " + "" + languages[position], Toast.LENGTH_SHORT).show()
                     Log.d("timePick", times[position])
@@ -458,18 +476,30 @@ class MainActivity : AppCompatActivity() {
             val job = launch {
                 val time = measureTimeMillis {
                     try{
-                        val result = JSONObject(getTravelTime(s_lat, s_long, e_lat, e_long).optString("route")).optString("formattedTime")
+                        val result = JSONObject(
+                            getTravelTime(s_lat, s_long, e_lat, e_long).optString(
+                                "route"
+                            )
+                        ).optString("formattedTime")
                         travelTime = result
                     }
                     catch (e: java.lang.Exception){
                         Looper.prepare() // to be able to make toast
-                        Toast.makeText(this@MainActivity, "Road trip not possible!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Road trip not possible!",
+                            Toast.LENGTH_LONG
+                        ).show()
                         Looper.loop()
                         check = false
                     }
                     if(travelTime == ""){
                         Looper.prepare() // to be able to make toast
-                        Toast.makeText(this@MainActivity, "Road trip not possible!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Road trip not possible!",
+                            Toast.LENGTH_LONG
+                        ).show()
                         Looper.loop()
                         check = false
                     }
@@ -516,6 +546,63 @@ class MainActivity : AppCompatActivity() {
                     }
                     if(result == "US") {
                         check = true
+                    }
+                }
+            }
+        }
+        return check
+    }
+
+    private suspend fun weatherForecast(lat: Double, long: Double, timeValue: Long):Boolean{
+        var check = false
+        withContext(IO){
+            val job = launch {
+                val time = measureTimeMillis {
+                    var result = ""
+                    var tempKelvin: Float? = null
+                    var tempF: Float? = null
+                    try{
+                        val current = System.currentTimeMillis()/1000
+
+                        if(timeValue < current)
+                        {
+                            check = false
+                        }
+                        else if(timeValue == current || timeValue < current+3000){
+                            tempKelvin = JSONObject(getWeatherInfo(lat, long).getString("current")).optString(
+                                "temp"
+                            ).toFloat()
+                            if(tempKelvin != null){
+                                tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat()
+                                Log.d("TEMP", tempF.toString())
+                                check = true
+                            }
+                        }
+                        else if(timeValue > current+3000 && timeValue < current + 165600){
+                            val roundUp = (timeValue - (timeValue % 3600) + 3600).toString()
+                            val temp = getWeatherInfo(lat, long).getJSONArray("hourly")
+//                            if(tempKelvin != null){
+//                                tempF = ((tempKelvin - 273.15) * (9/5) + 32).toFloat()
+//                                Log.d("TEMP", tempF.toString())
+//                                check = true
+//                            }
+
+                            for(i in 0 until temp.length()){
+                                val newJson = JSONObject(temp[i].toString())
+                                if(newJson.getString("dt")==roundUp){
+                                    tempKelvin = newJson.getString("temp").toFloat()
+                                    if(tempKelvin != null){
+                                        tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat()
+                                        Log.d("TEMP", tempF.toString())
+                                        check = true
+                                    }
+                                    break
+                                }
+                            }
+                        }
+                    }
+                    catch (e: Exception) {
+                        check = false
                     }
                 }
             }
