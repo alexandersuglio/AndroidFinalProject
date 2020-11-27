@@ -14,6 +14,11 @@ class SplashPage: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        getActionBar()!!.hide();
+
+
+
+
         // Enables Always-on
 //        logIn.setOnClickListener {
 //            Log.d("signin", "you clicked sign in")

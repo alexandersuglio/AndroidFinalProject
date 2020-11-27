@@ -36,6 +36,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.system.measureTimeMillis
 
+import com.firebase.ui.auth.IdpResponse
+
 class MainActivity : AppCompatActivity() {
 
 //    override fun onCreate(savedInstanceState: Bundle?)
@@ -55,22 +57,24 @@ class MainActivity : AppCompatActivity() {
     private var timeStamp: MutableList<Long>  = mutableListOf()
     private lateinit var travelTime: String
 
-    private val RC_SIGN_IN = 123 // some arbitrary code
+//    private val RC_SIGN_IN = 123 // some arbitrary code
     private var currentEmail = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         setContentView(R.layout.activity_main)
 
         // Choose authentication providers
-        val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
+//        val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
 
         // Create and launch sign-in intent
-        startActivityForResult(AuthUI.getInstance()
-                .createSignInIntentBuilder().setIsSmartLockEnabled(false)
-                .setAvailableProviders(providers).build(), RC_SIGN_IN)
+//        startActivityForResult(AuthUI.getInstance()
+//                .createSignInIntentBuilder().setIsSmartLockEnabled(false)
+//                .setAvailableProviders(providers).build(), RC_SIGN_IN)
 
 
 //        signOut.setOnClickListener{
@@ -543,9 +547,9 @@ class MainActivity : AppCompatActivity() {
 //                  Email: $email"""
 //    }
 
-    private fun getEmail(email: String): String{
-        return """Welcome, $email, where are we going today? """
-    }
+//    private fun getEmail(email: String): String{
+//        return """Welcome, $email, where are we going today? """
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -576,43 +580,55 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
-    {
-
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN)
-        {
-            // val response = IdpResponse.fromResultIntent(data)
-
-            if (resultCode == Activity.RESULT_OK)
-            {
-                // Successfully signed in
-                val user = FirebaseAuth.getInstance().currentUser
-
-                val name = user?.displayName ?: ""
-                currentEmail = user?.email ?: ""
-
-
-                //greeting toast
-                Toast.makeText(this, getEmail(currentEmail), Toast.LENGTH_SHORT).show()
-
-
-                // userTV.text = formatTV(name, currentEmail)
-                //temp
-                //greeting.text = getEmail(currentEmail)
-               //setContentView(R.layout.activity_main)
-
-            }
-
-            else
-            {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
-                Log.d("ERROR", "Sign in failed")
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+//    {
+//
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if (requestCode == RC_SIGN_IN)
+//        {
+//             val response = IdpResponse.fromResultIntent(data)
+//
+//            if (resultCode == Activity.RESULT_OK)
+//            {
+//                // Successfully signed in
+//                val user = FirebaseAuth.getInstance().currentUser
+//
+//                val name = user?.displayName ?: ""
+//                currentEmail = user?.email ?: ""
+//
+//
+//                //greeting toast
+//                Toast.makeText(this, getEmail(currentEmail), Toast.LENGTH_SHORT).show()
+//
+//
+//                // userTV.text = formatTV(name, currentEmail)
+//                //temp
+//                //greeting.text = getEmail(currentEmail)
+//               //setContentView(R.layout.activity_main)
+//
+//            }
+//
+//            else
+//            {
+//                // Sign in failed. If response is null the user canceled the
+//                // sign-in flow using the back button. Otherwise check
+//                // response.getError().getErrorCode() and handle the error.
+//                // ...
+//                Log.d("ERROR", "Sign in failed")
+//
+//                if (response == null) {
+//                    // User pressed back button. NOTE: This is where the back action is
+//                    //taken care of
+//
+//                    val intent = Intent(this, landing_page::class.java)
+//                    startActivity(intent)
+//                    finish()
+//
+//                    return;
+//                }
+//
+//            }
+//        }
+//    }
 }
