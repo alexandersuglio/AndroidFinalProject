@@ -243,7 +243,7 @@
             android:id="@+id/btnSubmit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SUBMIT" />
+            android:text="GET WEATHER INFO" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
