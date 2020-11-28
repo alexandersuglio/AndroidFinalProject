@@ -138,7 +138,7 @@
     android:id="@+id/pickDateTime"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_constraintBottom_toTopOf="@id/checkPoint"
+    app:layout_constraintBottom_toTopOf="@id/timeZone"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/topScroll">
 
@@ -167,6 +167,35 @@
 </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/timeZone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@id/checkPoint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pickDateTime">
+
+        <TextView
+            android:id="@+id/timeText"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_marginLeft="8dp"
+            android:text="Time Zone for Departure:"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/timeZoneText"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_marginLeft="8dp"
+            android:text=""
+            android:textSize="15dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/checkPoint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -174,7 +203,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/submitBut"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pickDateTime">
+        app:layout_constraintTop_toBottomOf="@id/timeZone">
 
 
         <Button
