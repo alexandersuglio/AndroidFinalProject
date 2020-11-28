@@ -4,7 +4,6 @@ package com.example.nomadfinal
 //import com.example.nomadfinal.data.*
 
 
-import android.app.Activity
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
@@ -16,11 +15,12 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.Fragment
 import com.example.nomadfinal.data.Data
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -33,9 +33,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.system.measureTimeMillis
-import java.util.TimeZone
 
-import com.firebase.ui.auth.IdpResponse
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
@@ -255,25 +253,25 @@ class MainActivity : AppCompatActivity() {
                         else
                         {
                             Toast.makeText(this, "End Point is not Valid!", Toast.LENGTH_LONG).show()
-                            clearVaribales()
+                            clearVariables()
                         }
                     }
                     else
                     {
                         Toast.makeText(this, "Start Point is not Valid!", Toast.LENGTH_LONG).show()
-                        clearVaribales()
+                        clearVariables()
                     }
                 }
                 catch (e: Exception){
                     Toast.makeText(this, "Please enter a valid Address!", Toast.LENGTH_LONG).show()
-                    clearVaribales()
+                    clearVariables()
                 }
 
             }
             else
             {
                 Toast.makeText(this, "Address is blank!", Toast.LENGTH_LONG).show()
-                clearVaribales()
+                clearVariables()
             }
 
             for(i in 1 until checkPoint){
@@ -296,24 +294,24 @@ class MainActivity : AppCompatActivity() {
                                 "Please enter a valid Address!",
                                 Toast.LENGTH_LONG
                             ).show()
-                            clearVaribales()
+                            clearVariables()
                         }
                     }
                     catch (e: Exception){
                         Toast.makeText(this, "Please enter a valid Address!", Toast.LENGTH_LONG).show()
-                        clearVaribales()
+                        clearVariables()
                     }
                 }
                 else{
                     Toast.makeText(this, "Address is blank!", Toast.LENGTH_LONG).show()
-                    clearVaribales()
+                    clearVariables()
                 }
             }
 
             if(location1.size != checkPoint+1){
                 Log.d("error", location1.size.toString()+"/"+checkPoint.toString())
                 Toast.makeText(this, "One or more addresses are Invalid!", Toast.LENGTH_LONG).show()
-                clearVaribales()
+                clearVariables()
             }
 
             else{
@@ -334,7 +332,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 if(checkUSA != 0){
                     Toast.makeText(this, "Road trip within the US only!", Toast.LENGTH_LONG).show()
-                    clearVaribales()
+                    clearVariables()
                 }
                 else{
                     var checkTravelTime = 0
@@ -358,7 +356,7 @@ class MainActivity : AppCompatActivity() {
 
                     if(checkTravelTime !=0){
                         Toast.makeText(this, "Road trip not possible!", Toast.LENGTH_LONG).show()
-                        clearVaribales()
+                        clearVariables()
                     }
                     else{
 
@@ -368,7 +366,7 @@ class MainActivity : AppCompatActivity() {
                                 "Please fill the details correctly!",
                                 Toast.LENGTH_LONG
                             ).show()
-                            clearVaribales()
+                            clearVariables()
                         }
                         else {
                             var checkWeatherInfo = 0
@@ -394,32 +392,36 @@ class MainActivity : AppCompatActivity() {
                                     this,
                                     "Weather Information cannot be found",
                                     Toast.LENGTH_LONG).show()
-                                    clearVaribales()
+                                    clearVariables()
                                 }
                                 1 ->{
                                     Toast.makeText(
                                         this,
                                         "Weather Information cannot be found.",
                                         Toast.LENGTH_LONG).show()
-                                    clearVaribales()
+                                    clearVariables()
                                 }
                                 2 ->{
                                     Toast.makeText(
                                         this,
                                         "Please provide future departure time!",
                                         Toast.LENGTH_LONG).show()
-                                    clearVaribales()
+                                    clearVariables()
                                 }
                                 5 ->{
                                     Toast.makeText(
                                         this,
                                         "Weather Information cannot be found.",
                                         Toast.LENGTH_LONG).show()
-                                    clearVaribales()
+                                    clearVariables()
                                 }
                                 else -> {
 
-
+                                    Toast.makeText(
+                                        this,
+                                        "Successfully loaded Data!",
+                                        Toast.LENGTH_LONG).show()
+                                    clearVariables()
                                 }
                             }
                         }
@@ -533,7 +535,7 @@ class MainActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
                         Looper.loop()
-                        clearVaribales()
+                        clearVariables()
                         check = false
                     }
                     if(travelTime == ""){
@@ -544,7 +546,7 @@ class MainActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
                         Looper.loop()
-                        clearVaribales()
+                        clearVariables()
                         check = false
                     }
                     else{
@@ -637,14 +639,9 @@ class MainActivity : AppCompatActivity() {
                             time = java.time.format.DateTimeFormatter.ISO_INSTANT
                                 .format(java.time.Instant.ofEpochSecond(timeValue+offset))
 
-                            if(tempKelvin != null){
-                                tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
-                                dataList.add(Data(locality,tempF,weatherCondition,icon,time,timeZone))
-                                check = 3
-                            }
-                            else{
-                                check = 5
-                            }
+                            tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
+                            dataList.add(Data(locality,tempF,weatherCondition,icon,time,timeZone))
+                            check = 3
                         }
                         else if(timeValue > current+3000 && timeValue <= current + 165600){
                             val roundUp = (timeValue - (timeValue % 3600) + 3600).toString()
@@ -668,27 +665,36 @@ class MainActivity : AppCompatActivity() {
 
                                     tempKelvin = newJson.getString("temp").toFloat()
 
-                                    if(tempKelvin != null){
-                                        tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
-                                        dataList.add(Data(locality,tempF,weatherCondition,icon,time,timeZone))
-                                        check = 3
-                                    }
-                                    else{
-                                        check = 5
-                                    }
+                                    tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
+                                    dataList.add(Data(locality,tempF,weatherCondition,icon,time,timeZone))
+                                    check = 3
                                     break
                                 }
                             }
                         }
                         else if(timeValue > current + 165600 && timeValue <= current + 777600){
-                            val roundUp = (timeValue - (timeValue % 86400) + 86400).toString()
+                            //var roundUp = (timeValue - (timeValue % 86400) + 86400)
                             val jsonDataObject = getWeatherInfo(lat, long)
                             val temp = jsonDataObject.getJSONArray("daily")
 
+                            val firstDate = JSONObject(temp[0].toString()).getString("dt").toLong()
+
+                            var roundUp = firstDate
+
+                            if(timeValue <= firstDate)
+                            {
+                                 roundUp = firstDate
+                            }
+                            else {
+                                val uy = timeValue - firstDate
+                                val yt = uy / 86400
+                                val some = (yt * 86400)
+                                roundUp = some + firstDate
+                            }
+
                             for(i in 0 until temp.length()){
                                 val newJson = JSONObject(temp[i].toString())
-                                //if(newJson.getString("dt")==roundUp){
-                                if(newJson.getString("dt") != roundUp){
+                                if(newJson.getString("dt") == roundUp.toString()){
                                     offset = jsonDataObject.getString("timezone_offset").toLong()
 
                                     timeZone = jsonDataObject.getString("timezone")
@@ -703,14 +709,9 @@ class MainActivity : AppCompatActivity() {
 
                                     tempKelvin = JSONObject(newJson.getString("temp")).getString("day").toFloat()
 
-                                    if(tempKelvin != null){
-                                        tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
-                                        dataList.add(Data(locality,tempF,weatherCondition,icon,time,timeZone))
-                                        check = 3
-                                    }
-                                    else{
-                                        check = 5
-                                    }
+                                    tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
+                                    dataList.add(Data(locality,tempF,weatherCondition,icon,time,timeZone))
+                                    check = 3
                                     break
                                 }
                                 else{
@@ -720,6 +721,18 @@ class MainActivity : AppCompatActivity() {
                         }
                         else{
 
+                            val jsonDataObject = getWeatherInfo(lat, long)
+
+                            offset = jsonDataObject.getString("timezone_offset").toLong()
+
+                            timeZone = jsonDataObject.getString("timezone")
+
+
+                            time = java.time.format.DateTimeFormatter.ISO_INSTANT
+                                .format(java.time.Instant.ofEpochSecond(timeValue+offset))
+
+                            dataList.add(Data(locality,null,weatherCondition,icon,time,timeZone))
+                            check = 3
                         }
                     }
                     catch (e: Exception) {
@@ -731,7 +744,7 @@ class MainActivity : AppCompatActivity() {
         return check
     }
 
-    private fun clearVaribales() {
+    private fun clearVariables() {
         location1 = mutableListOf()
         locationLat = mutableListOf()
         locationLong = mutableListOf()
