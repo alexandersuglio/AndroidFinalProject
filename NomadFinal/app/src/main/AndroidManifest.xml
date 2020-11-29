@@ -56,12 +56,12 @@
 
         <!-- Temp -->
 
-        <activity android:name=".WeatherPost">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--        <activity android:name=".WeatherPost">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-            </intent-filter>
-        </activity>
+<!--            </intent-filter>-->
+<!--        </activity>-->
 
     </application>
 

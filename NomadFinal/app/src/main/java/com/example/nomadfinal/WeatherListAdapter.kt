@@ -35,77 +35,51 @@ abstract class WeatherListAdapter(private val viewModel: MainViewModel) : Recycl
         //heading
         var subHead = itemView.findViewById<TextView>(R.id.subRowHeading)
 
+
         //description
         var subDescription = itemView.findViewById<TextView>(R.id.subRowDetails)
 
         //sub picture
-        var subPic = itemView.findViewById<ImageView>(R.id.subRowPic)
+      //  var subPic = itemView.findViewById<ImageView>(R.id.subRowPic)
 
         init
         {
             Log.d("SOS", "are you reading this")
 
-            //click title on subreddit
-            subHead.setOnClickListener{
 
-
-//                viewModel.subreddit.value = subHead.text.toString()
-//
-//                viewModel.netPosts()
-//
-//                viewModel.setTitleToSubreddit()
-
-                //pop back to stack()
-                (itemView.context as FragmentActivity).supportFragmentManager.popBackStack()
-
-            }
         }
 
         fun bind(item: Data)
         {
 
-//            subHead.text = item.displayName
-//
-//            subDescription.text = item.publicDescription
-//
-//            //if iconURL exists....
-//            if (item.iconURL != null)
-//            {
-//
-//                //I liked this pic of Dennis Nedry instead...
-//                //"https://static.wikia.nocookie.net/villains/images/0/0b/DennisHD.v2.jpg/revision/latest/scale-to-width-down/620?cb=20180406230329"
-//
-//                Glide.glideFetch(item.iconURL, item.iconURL, subPic)
 
-   //         }
+            subHead.text = item.location
+
+            subDescription.text = item.temperature.toString()
+
         }
     }
 
     //on create view holder method...
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH
-//    {
-//        //layout inflator
-//        val v = LayoutInflater.from(parent.context).inflate(R.layout.row_subreddit, parent, false)
-//        return VH(v)
-//    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH
+    {
+        //layout inflator
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.weather_row, parent, false)
+        return VH(v)
+    }
 //
 //    //on bind view holder method...
-//    override fun onBindViewHolder(holder: VH, position: Int)
-//    {
-//        //on bind view utilize our observerMediatorLiveData
-//        viewModel.observerMediatorLiveDataSubReddit().value?.get(position)?.let{ holder.bind(it) }
-//    }
+    override fun onBindViewHolder(holder: VH, position: Int)
+    {
+        //on bind view utilize our observerMediatorLiveData
+        viewModel.observeWeather().value?.get(position)?.let{ holder.bind(it) }
+    }
 //
 //    //get item count method...
-//    override fun getItemCount(): Int
-//    {
-//        //on get item utilize our observermediatorLiveDataSubreddit
-//        return viewModel.observerMediatorLiveDataSubReddit().value!!.size
-//    }
+   override fun getItemCount(): Int
+    {
+        //on get item utilize our observermediatorLiveDataSubreddit
+        return viewModel.observeWeather().value!!.size
+    }
 }
 
-
-
-//for inspiration I can look inside....
-//music player
-//color
