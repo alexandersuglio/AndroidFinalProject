@@ -9,31 +9,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nomadfinal.data.Data
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.HashMap
 
-
-// NB: Could probably unify with PostRowAdapter if we had two
-// different VH and override getItemViewType
-// https://medium.com/@droidbyme/android-recyclerview-with-multiple-view-type-multiple-view-holder-af798458763b
  class WeatherListAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<WeatherListAdapter.VH>()
 {
-
-    //instantiate test... something I tried earlier
-    //var idk = Subreddits()
 
     private var hashMap:HashMap<String, Int> = HashMap()
 
     // ViewHolder pattern minimizes calls to findViewById
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
-        // var idk = findViewById<>
-        // XXX Write me.
-        // NB: This one-liner will exit the current fragment
-
-        //dont use this yet...
-        // var notSure = (itemView.context as FragmentActivity).supportFragmentManager.popBackStack()
 
         //heading
         var subHead = itemView.findViewById<TextView>(R.id.subRowHeading)
@@ -89,9 +74,6 @@ import kotlin.collections.HashMap
 
             hashMap[item.icon]?.let { subPic.setImageResource(it) }
 
-            //val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy")
-            //val formatted = item.time.format(formatter)
-
             val date = item.time.substringBefore("T")
 
             var timeD = item.time.substringAfter("T").substringBefore("Z").dropLast(3)
@@ -121,19 +103,19 @@ import kotlin.collections.HashMap
     //on create view holder method...
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH
     {
-        //layout inflator
+        //layout inflater
         val v = LayoutInflater.from(parent.context).inflate(R.layout.weather_row, parent, false)
         return VH(v)
     }
-//
-//    //on bind view holder method...
+
+   //on bind view holder method...
     override fun onBindViewHolder(holder: VH, position: Int)
     {
         //on bind view utilize our observerMediatorLiveData
         viewModel.observeWeather().value?.get(position)?.let{ holder.bind(it) }
     }
-//
-//    //get item count method...
+
+    //get item count method...
    override fun getItemCount(): Int
     {
         //on get item utilize our observermediatorLiveDataSubreddit

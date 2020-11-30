@@ -37,7 +37,6 @@ class WeatherList: Fragment() {
 
         setHasOptionsMenu(true);
 
-        //inflate fragement layout gives me a view
         //then return view....
         var view = inflater.inflate(R.layout.fragment_rv, container, false)
 
@@ -51,9 +50,7 @@ class WeatherList: Fragment() {
         RV.adapter = adapter
         RV.layoutManager = LinearLayoutManager(context)
 
-        //grabs action title text, changes text to pick, but turn off click listener
-
-        //observe me
+        //observer
         viewM.observeWeather().observe(viewLifecycleOwner,
                 {
                     adapter.notifyDataSetChanged()
@@ -74,7 +71,6 @@ class WeatherList: Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.signOUT) {
-            // do something here
 
             Log.d("idk", "you definitely clicked me!")
 
