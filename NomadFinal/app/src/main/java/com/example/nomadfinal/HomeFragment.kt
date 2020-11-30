@@ -1,6 +1,7 @@
 package com.example.nomadfinal
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -56,7 +57,7 @@ class HomeFragment : Fragment() {
     private val sysTimeZone = Calendar.getInstance().timeZone.displayName
 
 
-    private val RC_SIGN_IN = 123 // some arbitrary code
+    //private val RC_SIGN_IN = 123 // some arbitrary code
     private var currentEmail = ""
 
 
@@ -82,9 +83,12 @@ class HomeFragment : Fragment() {
         val check3 = view.findViewById<TextInputLayout>(R.id.check3)
         val check4 = view.findViewById<TextInputLayout>(R.id.check4)
         val check5 = view.findViewById<TextInputLayout>(R.id.check5)
+        val departText = view.findViewById<TextView>(R.id.leaving)
         val submitBut = view.findViewById<Button>(R.id.btnSubmit)
         val startPoint = view.findViewById<TextInputEditText>(R.id.startText)
         val endPoint = view.findViewById<TextInputEditText>(R.id.endText)
+        val startLayout = view.findViewById<TextInputLayout>(R.id.startField)
+        val endLayout = view.findViewById<TextInputLayout>(R.id.endField)
         val departTime = view.findViewById<Spinner>(R.id.spinner1)
         val departDate = view.findViewById<Spinner>(R.id.spinner2)
         view.findViewById<TextView>(R.id.timeZoneText)?.text  = sysTimeZone
@@ -92,100 +96,99 @@ class HomeFragment : Fragment() {
 
         setHasOptionsMenu(true);
 
+        startLayout.visibility = View.VISIBLE
+        endLayout.visibility = View.VISIBLE
 
+        departText.text = "Depart Time:"
+        departText.setTypeface(null, Typeface.BOLD)
 
-
-        if (addBut != null) {
-            addBut.setOnClickListener {  //view ->
-                when (checkPoint) {
-                    1 -> {
-                        if (check1 != null) {
-                            check1.visibility = View.VISIBLE
-                        }
-                        checkPoint++
+        addBut?.setOnClickListener {
+            when (checkPoint) {
+                1 -> {
+                    if (check1 != null) {
+                        check1.visibility = View.VISIBLE
                     }
+                    checkPoint++
+                }
 
-                    2 -> {
-                        if (check2 != null) {
-                            check2.visibility = View.VISIBLE
-                        }
-                        checkPoint++
+                2 -> {
+                    if (check2 != null) {
+                        check2.visibility = View.VISIBLE
                     }
+                    checkPoint++
+                }
 
-                    3 -> {
-                        if (check3 != null) {
-                            check3.visibility = View.VISIBLE
-                        }
-                        checkPoint++
+                3 -> {
+                    if (check3 != null) {
+                        check3.visibility = View.VISIBLE
                     }
+                    checkPoint++
+                }
 
-                    4 -> {
-                        if (check4 != null) {
-                            check4.visibility = View.VISIBLE
-                        }
-                        checkPoint++
+                4 -> {
+                    if (check4 != null) {
+                        check4.visibility = View.VISIBLE
                     }
+                    checkPoint++
+                }
 
-                    5 -> {
-                        if (check5 != null) {
-                            check5.visibility = View.VISIBLE
-                        }
-                        checkPoint++
+                5 -> {
+                    if (check5 != null) {
+                        check5.visibility = View.VISIBLE
                     }
+                    checkPoint++
+                }
 
-                    6 -> {
-                        Toast.makeText(
-                            this.context,
-                            "Cannot add more checkpoints",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                6 -> {
+                    Toast.makeText(
+                        this.context,
+                        "Cannot add more checkpoints",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
 
-        if (remBut != null) {
-            remBut.setOnClickListener {  //view ->
-                when (checkPoint) {
-                    1 -> {
-                        Toast.makeText(this.context, "No checkpoints to remove", Toast.LENGTH_LONG)
-                            .show()
-                    }
+        remBut?.setOnClickListener {
+            when (checkPoint) {
+                1 -> {
+                    Toast.makeText(this.context, "No checkpoints to remove", Toast.LENGTH_LONG)
+                        .show()
+                }
 
-                    2 -> {
-                        if (check1 != null) {
-                            check1.visibility = View.INVISIBLE
-                        }
-                        checkPoint--
+                2 -> {
+                    if (check1 != null) {
+                        check1.visibility = View.INVISIBLE
                     }
+                    checkPoint--
+                }
 
-                    3 -> {
-                        if (check2 != null) {
-                            check2.visibility = View.INVISIBLE
-                        }
-                        checkPoint--
+                3 -> {
+                    if (check2 != null) {
+                        check2.visibility = View.INVISIBLE
                     }
+                    checkPoint--
+                }
 
-                    4 -> {
-                        if (check3 != null) {
-                            check3.visibility = View.INVISIBLE
-                        }
-                        checkPoint--
+                4 -> {
+                    if (check3 != null) {
+                        check3.visibility = View.INVISIBLE
                     }
+                    checkPoint--
+                }
 
-                    5 -> {
-                        if (check4 != null) {
-                            check4.visibility = View.INVISIBLE
-                        }
-                        checkPoint--
+                5 -> {
+                    if (check4 != null) {
+                        check4.visibility = View.INVISIBLE
                     }
+                    checkPoint--
+                }
 
-                    6 -> {
-                        if (check5 != null) {
-                            check5.visibility = View.INVISIBLE
-                        }
-                        checkPoint--
+                6 -> {
+                    if (check5 != null) {
+                        check5.visibility = View.INVISIBLE
                     }
+                    checkPoint--
                 }
             }
         }
@@ -193,135 +196,49 @@ class HomeFragment : Fragment() {
 
         geocoder = Geocoder(this.context)
 
-//        var start_lat = 0.00
-//        var start_long = 0.00
-//        var end_lat = 0.00
-//        var end_long = 0.00
+        submitBut?.setOnClickListener {
+            val dT = departTime?.selectedItem
+            val dD = departDate?.selectedItem
+            val epoch = SimpleDateFormat("MM-dd-yyyy HH:mm:ss").parse("$dD $dT:00").time / 1000
 
-        if (submitBut != null) {
-            submitBut.setOnClickListener {  //view ->
-                val dT = departTime?.selectedItem
-                val dD = departDate?.selectedItem
-                val epoch = SimpleDateFormat("MM-dd-yyyy HH:mm:ss").parse("$dD $dT:00").time / 1000
+            timeStamp.add(epoch)
 
-                timeStamp.add(epoch)
+            if (startPoint != null) {
+                if (endPoint != null) {
+                    if(!startPoint.text.isNullOrEmpty() && !endPoint.text.isNullOrEmpty()){
+                        try{
+                            location = geocoder.getFromLocationName(
+                                startPoint.text.toString(),
+                                1
+                            )[0]
+                            if(location != null){
 
-                //location1.add()
+                                location1.add(location)
 
-    //            if(!startPoint.text.isNullOrEmpty() && !endPoint.text.isNullOrEmpty()){
-    //                try{
-    //                    location = geocoder.getFromLocationName(startPoint.text.toString(), 1).get(0)
-    //                    if(location != null){
-    //                        start_lat = location.latitude
-    //                        start_long = location.longitude
-    //
-    //
-    //
-    //                        location = geocoder.getFromLocationName(endPoint.text.toString(), 1).get(0)
-    //
-    //                        if(location != null){
-    //                            end_lat = location.latitude
-    //                            end_long = location.longitude
-    //                            CoroutineScope(IO).launch {
-    //                                if(checkCountry(start_lat, start_long) == true && checkCountry(end_lat, end_long) == true) {
-    //                                    mapApiRequest(start_lat, start_long, end_lat, end_long)
-    //                                }
-    //                                else{
-    //                                    Looper.prepare() // to be able to make toast
-    //                                    Toast.makeText(this@MainActivity, "Road trip within the US only!", Toast.LENGTH_LONG).show()
-    //                                    Looper.loop()
-    //                                }
-    //                            }
-    //                        }
-    //                        else
-    //                        {
-    //                            Toast.makeText(this, "End Point is not Valid!", Toast.LENGTH_LONG).show()
-    //                        }
-    //                    }
-    //                    else
-    //                    {
-    //                        Toast.makeText(this, "Start Point is not Valid!", Toast.LENGTH_LONG).show()
-    //                    }
-    //                }
-    //                catch (e: Exception){
-    //                    Toast.makeText(this, "Please enter a valid Address!", Toast.LENGTH_LONG).show()
-    //                }
-    //            }
-                if (startPoint != null) {
-                    if (endPoint != null) {
-                        if(!startPoint.text.isNullOrEmpty() && !endPoint.text.isNullOrEmpty()){
-                            try{
                                 location = geocoder.getFromLocationName(
-                                    startPoint.text.toString(),
+                                    endPoint.text.toString(),
                                     1
-                                ).get(0)
+                                )[0]
+
                                 if(location != null){
-
                                     location1.add(location)
-
-                                    location = geocoder.getFromLocationName(
-                                        endPoint.text.toString(),
-                                        1
-                                    ).get(0)
-
-                                    if(location != null){
-                                        location1.add(location)
-                                    } else {
-                                        Toast.makeText(
-                                            this.context,
-                                            "End Point is not Valid!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        clearVariables()
-                                    }
                                 } else {
                                     Toast.makeText(
                                         this.context,
-                                        "Start Point is not Valid!",
+                                        "End Point is not Valid!",
                                         Toast.LENGTH_LONG
                                     ).show()
                                     clearVariables()
                                 }
-                            } catch (e: Exception){
+                            } else {
                                 Toast.makeText(
                                     this.context,
-                                    "Please enter a valid Address!",
+                                    "Start Point is not Valid!",
                                     Toast.LENGTH_LONG
                                 ).show()
                                 clearVariables()
                             }
-
-                        } else {
-                            Toast.makeText(this.context, "Address is blank!", Toast.LENGTH_LONG).show()
-                            clearVariables()
-                        }
-                    }
-                }
-
-                for(i in 1 until checkPoint){
-                    if(locationList[i - 1]?.text.toString().isNotEmpty()){
-                        Log.d("I am here", location1.size.toString() + "/" + checkPoint.toString())
-
-                        //val d = locationList[i-1]
-                        //val dv = locationList[i-1].text.toString()
-                        try{
-                            location = geocoder.getFromLocationName(
-                                locationList[i - 1]?.text.toString(),
-                                1
-                            ).get(0)
-                            if(location != null){
-                                location1.add(location)
-                            }
-                            else{
-                                Toast.makeText(
-                                    this.context,
-                                    "Please enter a valid Address!",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                clearVariables()
-                            }
-                        }
-                        catch (e: Exception){
+                        } catch (e: Exception){
                             Toast.makeText(
                                 this.context,
                                 "Please enter a valid Address!",
@@ -329,207 +246,233 @@ class HomeFragment : Fragment() {
                             ).show()
                             clearVariables()
                         }
-                    }
-                    else{
+
+                    } else {
                         Toast.makeText(this.context, "Address is blank!", Toast.LENGTH_LONG).show()
                         clearVariables()
                     }
                 }
+            }
 
-                if(location1.size != checkPoint+1){
-                    Log.d("error", location1.size.toString() + "/" + checkPoint.toString())
-                    Toast.makeText(
-                        this.context,
-                        "One or more addresses are Invalid!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    clearVariables()
-                }
+            for(i in 1 until checkPoint){
+                if(locationList[i - 1]?.text.toString().isNotEmpty()){
+                    Log.d("I am here", location1.size.toString() + "/" + checkPoint.toString())
 
-                else{
-                    var checkUSA = 0
-                    for(item in location1){
-                        locationLat.add(item.latitude)
-                        locationLong.add(item.longitude)
-                        locality.add(item.locality)
-                        val job1 = CoroutineScope(IO).launch {
-                            if(!checkCountry(item.latitude, item.longitude)){
-                                checkUSA++
-                            }
-                        }
-
-                        runBlocking{
-                            job1.join()
-                        }
-                    }
-                    if(checkUSA != 0){
-                        Toast.makeText(
-                            this.context,
-                            "Road trip within the US only!",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        clearVariables()
-                    }
-                    else{
-                        var checkTravelTime = 0
-                        for(i in 1 .. checkPoint){
-                            val job2 = CoroutineScope(IO).launch {
-                                if(!mapApiRequest(
-                                        locationLat[i - 1],
-                                        locationLong[i - 1],
-                                        locationLat[i],
-                                        locationLong[i]
-                                    ))
-                                {
-                                    checkTravelTime++
-                                }
-                            }
-
-                            runBlocking{
-                                job2.join()
-                            }
-                        }
-
-                        if(checkTravelTime !=0){
+                    try{
+                        location = geocoder.getFromLocationName(
+                            locationList[i - 1]?.text.toString(),
+                            1
+                        )[0]
+                        if(location != null){
+                            location1.add(location)
+                        } else{
                             Toast.makeText(
                                 this.context,
-                                "Road trip not possible!",
+                                "Please enter a valid Address!",
                                 Toast.LENGTH_LONG
                             ).show()
                             clearVariables()
                         }
-                        else{
+                    } catch (e: Exception){
+                        Toast.makeText(
+                            this.context,
+                            "Please enter a valid Address!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        clearVariables()
+                    }
+                } else{
+                    Toast.makeText(this.context, "Address is blank!", Toast.LENGTH_LONG).show()
+                    clearVariables()
+                }
+            }
 
-                            if(!(timeStamp.size == locationLat.size && timeStamp.size == locationLong.size && timeStamp.size == locality.size)){
-                                Toast.makeText(
-                                    this.context,
-                                    "Please fill the details correctly!",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                clearVariables()
+            if(location1.size != checkPoint+1){
+                Log.d("error", location1.size.toString() + "/" + checkPoint.toString())
+                Toast.makeText(
+                    this.context,
+                    "One or more addresses are Invalid!",
+                    Toast.LENGTH_LONG
+                ).show()
+                clearVariables()
+            } else{
+                var checkUSA = 0
+                for(item in location1){
+                    locationLat.add(item.latitude)
+                    locationLong.add(item.longitude)
+                    locality.add(item.locality)
+                    val job1 = CoroutineScope(IO).launch {
+                        if(!checkCountry(item.latitude, item.longitude)){
+                            checkUSA++
+                        }
+                    }
+
+                    runBlocking{
+                        job1.join()
+                    }
+                }
+                if(checkUSA != 0){
+                    Toast.makeText(
+                        this.context,
+                        "Road trip within the US only!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    clearVariables()
+                } else{
+                    var checkTravelTime = 0
+                    for(i in 1 .. checkPoint){
+                        val job2 = CoroutineScope(IO).launch {
+                            if(!mapApiRequest(
+                                    locationLat[i - 1],
+                                    locationLong[i - 1],
+                                    locationLat[i],
+                                    locationLong[i]
+                                )) {
+                                checkTravelTime++
                             }
-                            else {
-                                var checkWeatherInfo = 0
-                                loop@ for(i in 0 until timeStamp.size){
-                                    val job3 = CoroutineScope(IO).launch {
-                                        checkWeatherInfo = weatherForecast(
-                                            locationLat[i],
-                                            locationLong[i],
-                                            locality[i],
-                                            timeStamp[i]
-                                        )
-                                    }
-                                    runBlocking{
-                                        job3.join()
-                                    }
-                                    if(checkWeatherInfo == 1 || checkWeatherInfo == 2 || checkWeatherInfo == 5)
-                                        break@loop
+                        }
+
+                        runBlocking{
+                            job2.join()
+                        }
+                    }
+
+                    if(checkTravelTime !=0){
+                        Toast.makeText(
+                            this.context,
+                            "Road trip not possible!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        clearVariables()
+                    } else{
+
+                        if(!(timeStamp.size == locationLat.size && timeStamp.size == locationLong.size && timeStamp.size == locality.size)){
+                            Toast.makeText(
+                                this.context,
+                                "Please fill the details correctly!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            clearVariables()
+                        } else {
+                            var checkWeatherInfo = 0
+                            loop@ for(i in 0 until timeStamp.size){
+                                val job3 = CoroutineScope(IO).launch {
+                                    checkWeatherInfo = weatherForecast(
+                                        locationLat[i],
+                                        locationLong[i],
+                                        locality[i],
+                                        timeStamp[i]
+                                    )
                                 }
+                                runBlocking{
+                                    job3.join()
+                                }
+                                if(checkWeatherInfo == 1 || checkWeatherInfo == 2 || checkWeatherInfo == 5)
+                                    break@loop
+                            }
 
-                                when(checkWeatherInfo){
-                                    0 -> {
-                                        Toast.makeText(
-                                            this.context,
-                                            "Weather Information cannot be found",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        clearVariables()
-                                    }
-                                    1 -> {
-                                        Toast.makeText(
-                                            this.context,
-                                            "Weather Information cannot be found.",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        clearVariables()
-                                    }
-                                    2 -> {
-                                        Toast.makeText(
-                                            this.context,
-                                            "Please provide future departure time!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        clearVariables()
-                                    }
-                                    5 -> {
-                                        Toast.makeText(
-                                            this.context,
-                                            "Weather Information cannot be found.",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                        clearVariables()
-                                    }
-                                    else -> {
+                            when(checkWeatherInfo){
+                                0 -> {
+                                    Toast.makeText(
+                                        this.context,
+                                        "Weather Information cannot be found",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    clearVariables()
+                                }
+                                1 -> {
+                                    Toast.makeText(
+                                        this.context,
+                                        "Weather Information cannot be found.",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    clearVariables()
+                                }
+                                2 -> {
+                                    Toast.makeText(
+                                        this.context,
+                                        "Please provide future departure time!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    clearVariables()
+                                }
+                                5 -> {
+                                    Toast.makeText(
+                                        this.context,
+                                        "Weather Information cannot be found.",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    clearVariables()
+                                }
+                                else -> {
 
-                                        Toast.makeText(
-                                            this.context,
-                                            "Successfully loaded Data!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                    Toast.makeText(
+                                        this.context,
+                                        "Successfully loaded Data!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
 
-                                        Log.d("listLoad", dataList.toString())
+                                    Log.d("listLoad", dataList.toString())
 
-                                        ////////
+                                    viewModel.weatherInfo.postValue(dataList)
 
-                                        //new intent.....
-                                        //new page
-                                        //display all the info
+                                    clearVariables()
 
-                                        //on click specific result
-                                        //single view
+                                    ////////
 
-                                        //   var test = dataList.toTypedArray()
+                                    //new intent.....
+                                    //new page
+                                    //display all the info
 
-                                        var view = inflater.inflate(R.layout.weather_row, container, false)
-                                       var title = activity?.findViewById<TextView>(R.id.subRowHeading)
+                                    //on click specific result
+                                    //single view
 
-//                                        viewModel.observeWeather().observe(viewLifecycleOwner, androidx.lifecycle.Observer { data ->
-//                                            if (title != null)
-//                                            {
-//                                                title.text = data.toString()
-//                                            }
-//                                        })
+                                    //   var test = dataList.toTypedArray()
 
+//                                    var view = inflater.inflate(R.layout.weather_row, container, false)
+//                                    var title = activity?.findViewById<TextView>(R.id.subRowHeading)
 
-                                        // var test = dataList.map { it as Data }.toTypedArray()
-
-
-                                       // var test = dataList.toCollection(ArrayList())
-    //                                    Log.d("works", test.toString())
-    //
-    //
-//                                        val weatherIntent = Intent(this.context, WeatherPost::class.java).putExtra("weatherData", test)
-//                                        startActivity(weatherIntent)
-//                                        finish()
+    //                                        viewModel.observeWeather().observe(viewLifecycleOwner, androidx.lifecycle.Observer { data ->
+    //                                            if (title != null)
+    //                                            {
+    //                                                title.text = data.toString()
+    //                                            }
+    //                                        })
 
 
-    //                                    WeatherPost weatherPost //where data needs to be pass
-    //                                            Bundle bundle = new Bundle()
-    //                                    bundle.putParcelableArrayList("data", dataList);
-    //                                    weatherPost.setArguments(bundle);
+                                    // var test = dataList.map { it as Data }.toTypedArray()
+
+
+                                    // var test = dataList.toCollection(ArrayList())
+                                    //                                    Log.d("works", test.toString())
+                                    //
+                                    //
+    //                                        val weatherIntent = Intent(this.context, WeatherPost::class.java).putExtra("weatherData", test)
+    //                                        startActivity(weatherIntent)
+    //                                        finish()
+
+
+                                    //                                    WeatherPost weatherPost //where data needs to be pass
+                                    //                                            Bundle bundle = new Bundle()
+                                    //                                    bundle.putParcelableArrayList("data", dataList);
+                                    //                                    weatherPost.setArguments(bundle);
+
+
+                                    //  viewModel.weatherInfo.postValue(dataList)
+
+
+                                    ////////
 
 
 
-
-                                        //  viewModel.weatherInfo.postValue(dataList)
-
-
-
-                                        ////////
-
-
-
-
-                                        clearVariables()
-                                    }
                                 }
                             }
                         }
                     }
                 }
-
-
             }
+
+
         }
 
 
@@ -592,12 +535,10 @@ class HomeFragment : Fragment() {
         spinnerArray.add(idk4)
         spinnerArray.add(idk5)
 
-        val adapter =
-            this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, spinnerArray) }
+        val adapter = this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, spinnerArray) }
 
-        if (adapter != null) {
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
+        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         val sItems = departDate as? Spinner
         if (sItems != null) {
             sItems.adapter = adapter
@@ -623,8 +564,6 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-
-
 
         Log.d("datalist", dataList.toString())
 

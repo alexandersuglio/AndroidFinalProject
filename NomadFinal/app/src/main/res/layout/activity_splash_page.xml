@@ -4,26 +4,21 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/box_inset_layout_padding"
-    >
+    android:padding="@dimen/box_inset_layout_padding">
 
 <pl.droidsonroids.gif.GifImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/spinner"
             android:gravity="center"
-            android:layout_centerHorizontal="true"
-
-
-    />
+            android:layout_centerHorizontal="true"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="fetching"
+            android:text="Loading"
             android:textSize="20dp"
             android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            />
+            android:gravity="center"/>
 
 </LinearLayout>
