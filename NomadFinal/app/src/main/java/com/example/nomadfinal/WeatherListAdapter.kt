@@ -7,10 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.nomadfinal.data.Data
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
 
 
 // NB: Could probably unify with PostRowAdapter if we had two
@@ -22,7 +23,7 @@ import com.example.nomadfinal.data.Data
     //instantiate test... something I tried earlier
     //var idk = Subreddits()
 
-    private var hashMap:HashMap<String,Int> = HashMap()
+    private var hashMap:HashMap<String, Int> = HashMap()
 
     // ViewHolder pattern minimizes calls to findViewById
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -91,7 +92,24 @@ import com.example.nomadfinal.data.Data
             //val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy")
             //val formatted = item.time.format(formatter)
 
-            time.text = "on " + item.time.substringBefore("T")
+            val date = item.time.substringBefore("T")
+
+            var timeD = item.time.substringAfter("T").substringBefore("Z").dropLast(3)
+
+            val ampM = timeD
+
+            when(ampM.dropLast(3).toInt()){
+                0 -> timeD = "12" + timeD.drop(2) + " AM"
+                12 -> timeD = "$timeD PM"
+                in 1..11 -> timeD += " AM"
+                else -> {
+                    val ab = timeD
+                    val bc = (ab.dropLast(3).toInt() -12).toString()
+                    timeD = bc + timeD.drop(2) + " PM"
+                }
+            }
+
+            time.text = "on $date at $timeD"
 
             timeZone.text = "Time Zone: " + item.timeZone
 
