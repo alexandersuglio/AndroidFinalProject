@@ -41,8 +41,14 @@ import com.example.nomadfinal.data.Data
         //description
         var subDescription = itemView.findViewById<TextView>(R.id.subRowDetails)
 
+        var time =  itemView.findViewById<TextView>(R.id.time)
+
+        var timeZone =  itemView.findViewById<TextView>(R.id.timeZone)
+
         //sub picture
         var subPic = itemView.findViewById<ImageView>(R.id.subRowPic)
+
+        var weather = itemView.findViewById<TextView>(R.id.weather)
 
 
         init
@@ -73,9 +79,23 @@ import com.example.nomadfinal.data.Data
         {
             subHead.text = item.location
 
-            subDescription.text = item.temperature.toString()
+            var F = "\u2109"
+            var tempString = item.temperature.toString()
+            var totalString = tempString + F
+
+            subDescription.text = totalString
+
 
             hashMap[item.icon]?.let { subPic.setImageResource(it) }
+
+            //val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy")
+            //val formatted = item.time.format(formatter)
+
+            time.text = "on " + item.time.substringBefore("T")
+
+            timeZone.text = "Time Zone: " + item.timeZone
+
+            weather.text = item.weather
 
         }
     }

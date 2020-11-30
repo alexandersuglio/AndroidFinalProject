@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:id="@+id/subRowHeading"
                 android:text="SAMPLE TITLE"
                 />
@@ -35,10 +35,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 android:id="@+id/subRowDetails"
                 android:text="SAMPLE DETAILS"
                 />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="16sp"
+                android:id="@+id/weather"
+                android:text="SAMPLE DETAILS"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="16sp"
+                android:id="@+id/time"
+                android:text="SAMPLE DETAILS"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="16sp"
+                android:id="@+id/timeZone"
+                android:text="SAMPLE DETAILS"
+                />
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
