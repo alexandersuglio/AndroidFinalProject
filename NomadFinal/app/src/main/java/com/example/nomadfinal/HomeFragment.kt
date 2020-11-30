@@ -72,11 +72,11 @@ class HomeFragment : Fragment() {
 
         val addBut = view.findViewById<Button>(R.id.addCheckPoint)
         val remBut = view.findViewById<Button>(R.id.removeCheckPoint)
-        val check_1 = view.findViewById<TextInputEditText>(R.id.check_1)
-        val check_2 = view.findViewById<TextInputEditText>(R.id.check_2)
-        val check_3 = view.findViewById<TextInputEditText>(R.id.check_3)
-        val check_4 = view.findViewById<TextInputEditText>(R.id.check_4)
-        val check_5 = view.findViewById<TextInputEditText>(R.id.check_5)
+        val checkText1 = view.findViewById<TextInputEditText>(R.id.check_1)
+        val checkText2 = view.findViewById<TextInputEditText>(R.id.check_2)
+        val checkText3 = view.findViewById<TextInputEditText>(R.id.check_3)
+        val checkText4 = view.findViewById<TextInputEditText>(R.id.check_4)
+        val checkText5 = view.findViewById<TextInputEditText>(R.id.check_5)
         val check1 = view.findViewById<TextInputLayout>(R.id.check1)
         val check2 = view.findViewById<TextInputLayout>(R.id.check2)
         val check3 = view.findViewById<TextInputLayout>(R.id.check3)
@@ -91,7 +91,7 @@ class HomeFragment : Fragment() {
         val departTime = view.findViewById<Spinner>(R.id.spinner1)
         val departDate = view.findViewById<Spinner>(R.id.spinner2)
         view.findViewById<TextView>(R.id.timeZoneText)?.text  = sysTimeZone
-        var locationList = listOf(check_1, check_2, check_3, check_4, check_5)
+        var locationList = listOf(checkText1, checkText2, checkText3, checkText4, checkText5)
 
         setHasOptionsMenu(true);
 
@@ -100,6 +100,52 @@ class HomeFragment : Fragment() {
 
         departText.text = "Depart Time:"
         departText.setTypeface(null, Typeface.BOLD)
+
+        when(checkPoint){
+            1 -> {
+                check1.visibility = View.INVISIBLE
+                check2.visibility = View.INVISIBLE
+                check3.visibility = View.INVISIBLE
+                check4.visibility = View.INVISIBLE
+                check5.visibility = View.INVISIBLE
+            }
+            2 -> {
+                check1.visibility = View.VISIBLE
+                check2.visibility = View.INVISIBLE
+                check3.visibility = View.INVISIBLE
+                check4.visibility = View.INVISIBLE
+                check5.visibility = View.INVISIBLE
+            }
+            3 -> {
+                check1.visibility = View.VISIBLE
+                check2.visibility = View.VISIBLE
+                check3.visibility = View.INVISIBLE
+                check4.visibility = View.INVISIBLE
+                check5.visibility = View.INVISIBLE
+            }
+            4 -> {
+                check1.visibility = View.VISIBLE
+                check2.visibility = View.VISIBLE
+                check3.visibility = View.VISIBLE
+                check4.visibility = View.INVISIBLE
+                check5.visibility = View.INVISIBLE
+            }
+            5 -> {
+                check1.visibility = View.VISIBLE
+                check2.visibility = View.VISIBLE
+                check3.visibility = View.VISIBLE
+                check4.visibility = View.VISIBLE
+                check5.visibility = View.INVISIBLE
+            }
+            6 -> {
+                check1.visibility = View.VISIBLE
+                check2.visibility = View.VISIBLE
+                check3.visibility = View.VISIBLE
+                check4.visibility = View.VISIBLE
+                check5.visibility = View.VISIBLE
+            }
+
+        }
 
         addBut?.setOnClickListener {
             when (checkPoint) {
@@ -158,6 +204,7 @@ class HomeFragment : Fragment() {
                 2 -> {
                     if (check1 != null) {
                         check1.visibility = View.INVISIBLE
+                        checkText1.setText("")
                     }
                     checkPoint--
                 }
@@ -165,6 +212,7 @@ class HomeFragment : Fragment() {
                 3 -> {
                     if (check2 != null) {
                         check2.visibility = View.INVISIBLE
+                        checkText2.setText("")
                     }
                     checkPoint--
                 }
@@ -172,6 +220,7 @@ class HomeFragment : Fragment() {
                 4 -> {
                     if (check3 != null) {
                         check3.visibility = View.INVISIBLE
+                        checkText3.setText("")
                     }
                     checkPoint--
                 }
@@ -179,6 +228,7 @@ class HomeFragment : Fragment() {
                 5 -> {
                     if (check4 != null) {
                         check4.visibility = View.INVISIBLE
+                        checkText4.setText("")
                     }
                     checkPoint--
                 }
@@ -186,6 +236,7 @@ class HomeFragment : Fragment() {
                 6 -> {
                     if (check5 != null) {
                         check5.visibility = View.INVISIBLE
+                        checkText5.setText("")
                     }
                     checkPoint--
                 }
@@ -390,6 +441,8 @@ class HomeFragment : Fragment() {
 
                                     clearVariables()
 
+                                    //checkPoint = 1
+
                                     parentFragmentManager.beginTransaction()
                                             .replace(R.id.main_frame, WeatherList())
                                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -421,23 +474,23 @@ class HomeFragment : Fragment() {
 
             departTime.adapter = adapter
 
-            departTime.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
-            {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View,
-                    position: Int,
-                    id: Long
-                )
-                {
-                    //  Toast.makeText(this@MainActivity, getString(R.string.selected_item) + " " + "" + languages[position], Toast.LENGTH_LONG).show()
-                    Log.d("timePick", times[position])
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                    // write code to perform some action
-                }
-            }
+//            departTime.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+//            {
+//                override fun onItemSelected(
+//                    parent: AdapterView<*>,
+//                    view: View?,
+//                    position: Int,
+//                    id: Long
+//                )
+//                {
+//                    //  Toast.makeText(this@MainActivity, getString(R.string.selected_item) + " " + "" + languages[position], Toast.LENGTH_LONG).show()
+//                    Log.d("timePick", times[position])
+//                }
+//
+//                override fun onNothingSelected(parent: AdapterView<*>) {
+//                    // write code to perform some action
+//                }
+//            }
         }
 
 
@@ -474,28 +527,28 @@ class HomeFragment : Fragment() {
             sItems.adapter = adapter
         }
 
-        if (sItems != null) {
-            sItems.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
-            {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View,
-                    position: Int,
-                    id: Long
-                )
-                {
-                    Log.d("dayPick", spinnerArray[position])
+//        if (sItems != null) {
+//            sItems.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
+//            {
+//                override fun onItemSelected(
+//                    parent: AdapterView<*>,
+//                    view: View,
+//                    position: Int,
+//                    id: Long
+//                )
+//                {
+//                    Log.d("dayPick", spinnerArray[position])
+//
+//                }
+//
+//                override fun onNothingSelected(parent: AdapterView<*>)
+//                {
+//                    // write code to perform some action
+//                }
+//            }
+//        }
 
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>)
-                {
-                    // write code to perform some action
-                }
-            }
-        }
-
-        Log.d("datalist", dataList.toString())
+        //Log.d("datalist", dataList.toString())
 
         return view
     }

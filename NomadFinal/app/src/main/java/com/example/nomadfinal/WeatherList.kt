@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +13,6 @@ import com.firebase.ui.auth.AuthUI
 
 
 class WeatherList: Fragment() {
-   // override fun onCreate(savedInstanceState: Bundle?) {
         private val viewM: MainViewModel by activityViewModels()
 
     companion object
@@ -58,25 +56,11 @@ class WeatherList: Fragment() {
         //observe me
         viewM.observeWeather().observe(viewLifecycleOwner,
                 {
-
-                    //this doesn't do it...
-                    // adapter.submitList(it)
-
                     adapter.notifyDataSetChanged()
                 })
 
         //call swipe
         initSwipeLayout(view)
-
-        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true /* enabled by default */) {
-            override fun handleOnBackPressed() {
-                // Handle the back button event
-
-               // parentFragmentManager.popBackStack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-
 
         //view
         return view
@@ -101,29 +85,12 @@ class WeatherList: Fragment() {
                     val intent = Intent(this.context, landing_page::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
-
-
-                    //finish()
                 }
             }
 
         }
         return super.onOptionsItemSelected(item)
     }
-
-//     fun onBackPressed() {
-//        val fm: FragmentManager? = parentFragmentManager
-//        if (fm != null) {
-//            if (fm.getBackStackEntryCount() > 0) {
-//                Log.i("MainActivity", "popping backstack")
-//                fm.popBackStack()
-//            } else {
-//                Log.i("MainActivity", "nothing on backstack, calling super")
-//                //super.onBackPressed()
-//            }
-//        }
-//    }
-
 
 }
 

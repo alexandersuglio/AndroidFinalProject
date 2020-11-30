@@ -48,7 +48,7 @@ import com.example.nomadfinal.data.Data
         init
         {
             Log.d("SOS", "are you reading this")
-            
+
             hashMap.put("01d", R.drawable.one_day)
             hashMap.put("01n", R.drawable.one_night)
             hashMap.put("02d", R.drawable.two_day)
@@ -71,8 +71,6 @@ import com.example.nomadfinal.data.Data
 
         fun bind(item: Data)
         {
-
-
             subHead.text = item.location
 
             subDescription.text = item.temperature.toString()
