@@ -22,6 +22,8 @@ import com.example.nomadfinal.data.Data
     //instantiate test... something I tried earlier
     //var idk = Subreddits()
 
+    private var hashMap:HashMap<String,Int> = HashMap()
+
     // ViewHolder pattern minimizes calls to findViewById
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
@@ -46,8 +48,25 @@ import com.example.nomadfinal.data.Data
         init
         {
             Log.d("SOS", "are you reading this")
-
-
+            
+            hashMap.put("01d", R.drawable.one_day)
+            hashMap.put("01n", R.drawable.one_night)
+            hashMap.put("02d", R.drawable.two_day)
+            hashMap.put("02n", R.drawable.two_night)
+            hashMap.put("03d", R.drawable.three_day)
+            hashMap.put("03n", R.drawable.three_night)
+            hashMap.put("04d", R.drawable.four_day)
+            hashMap.put("04n", R.drawable.four_night)
+            hashMap.put("09d", R.drawable.nine_day)
+            hashMap.put("09n", R.drawable.nine_night)
+            hashMap.put("10d", R.drawable.ten_day)
+            hashMap.put("10n", R.drawable.ten_night)
+            hashMap.put("11d", R.drawable.eleven_day)
+            hashMap.put("11n", R.drawable.eleven_night)
+            hashMap.put("13d", R.drawable.thirteen_day)
+            hashMap.put("13n", R.drawable.thirteen_night)
+            hashMap.put("50d", R.drawable.fifty_day)
+            hashMap.put("50n", R.drawable.fifty_night)
         }
 
         fun bind(item: Data)
@@ -58,11 +77,7 @@ import com.example.nomadfinal.data.Data
 
             subDescription.text = item.temperature.toString()
 
-
-
-            var stringHolder = "oneday"
-
-            subPic.setImageResource(R.drawable.oneday)
+            hashMap[item.icon]?.let { subPic.setImageResource(it) }
 
         }
     }

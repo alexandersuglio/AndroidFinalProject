@@ -9,7 +9,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
@@ -17,7 +16,6 @@ import com.example.nomadfinal.data.Data
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -35,7 +33,7 @@ class HomeFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
 
-    //don't tweak this...
+
     companion object
     {
         fun newInstance(): HomeFragment
@@ -212,33 +210,15 @@ class HomeFragment : Fragment() {
                                 startPoint.text.toString(),
                                 1
                             )[0]
-                            if(location != null){
 
-                                location1.add(location)
+                            location1.add(location)
 
-                                location = geocoder.getFromLocationName(
-                                    endPoint.text.toString(),
-                                    1
-                                )[0]
+                            location = geocoder.getFromLocationName(
+                                endPoint.text.toString(),
+                                1
+                            )[0]
 
-                                if(location != null){
-                                    location1.add(location)
-                                } else {
-                                    Toast.makeText(
-                                        this.context,
-                                        "End Point is not Valid!",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    clearVariables()
-                                }
-                            } else {
-                                Toast.makeText(
-                                    this.context,
-                                    "Start Point is not Valid!",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                clearVariables()
-                            }
+                            location1.add(location)
                         } catch (e: Exception){
                             Toast.makeText(
                                 this.context,
@@ -264,16 +244,7 @@ class HomeFragment : Fragment() {
                             locationList[i - 1]?.text.toString(),
                             1
                         )[0]
-                        if(location != null){
-                            location1.add(location)
-                        } else{
-                            Toast.makeText(
-                                this.context,
-                                "Please enter a valid Address!",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            clearVariables()
-                        }
+                        location1.add(location)
                     } catch (e: Exception){
                         Toast.makeText(
                             this.context,
@@ -419,60 +390,11 @@ class HomeFragment : Fragment() {
 
                                     clearVariables()
 
-
                                     parentFragmentManager.beginTransaction()
                                             .replace(R.id.main_frame, WeatherList())
                                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                             .addToBackStack(null)
                                             .commit()
-
-
-                                    ////////
-
-                                    //new intent.....
-                                    //new page
-                                    //display all the info
-
-                                    //on click specific result
-                                    //single view
-
-                                    //   var test = dataList.toTypedArray()
-
-//                                    var view = inflater.inflate(R.layout.weather_row, container, false)
-//                                    var title = activity?.findViewById<TextView>(R.id.subRowHeading)
-
-    //                                        viewModel.observeWeather().observe(viewLifecycleOwner, androidx.lifecycle.Observer { data ->
-    //                                            if (title != null)
-    //                                            {
-    //                                                title.text = data.toString()
-    //                                            }
-    //                                        })
-
-
-                                    // var test = dataList.map { it as Data }.toTypedArray()
-
-
-                                    // var test = dataList.toCollection(ArrayList())
-                                    //                                    Log.d("works", test.toString())
-                                    //
-                                    //
-    //                                        val weatherIntent = Intent(this.context, WeatherPost::class.java).putExtra("weatherData", test)
-    //                                        startActivity(weatherIntent)
-    //                                        finish()
-
-
-                                    //                                    WeatherPost weatherPost //where data needs to be pass
-                                    //                                            Bundle bundle = new Bundle()
-                                    //                                    bundle.putParcelableArrayList("data", dataList);
-                                    //                                    weatherPost.setArguments(bundle);
-
-
-                                    //  viewModel.weatherInfo.postValue(dataList)
-
-
-                                    ////////
-
-
 
                                 }
                             }
@@ -534,7 +456,6 @@ class HomeFragment : Fragment() {
         val dateFormat5: DateFormat = SimpleDateFormat("MM-dd-yyyy")
         var idk5 = dateFormat5.format(Date().time + 4 * 86400000)
 
-        // you need to have a list of data that you want the spinner to display
         // you need to have a list of data that you want the spinner to display
         val spinnerArray: MutableList<String> = ArrayList()
 
@@ -626,22 +547,8 @@ class HomeFragment : Fragment() {
 
                         val newTime = previousTime + ((hoursMin[0].toLong()) *  60 * 60) + (hoursMin[1].toLong() * 60)
 
-//                        Looper.prepare() // to be able to make toast
-//                        Toast.makeText(this@MainActivity, timeStamp.size.toString(), Toast.LENGTH_LONG).show()
-//                        Looper.loop()
-
                         timeStamp.add(newTime)
 
-//                        Looper.prepare() // to be able to make toast
-//                        Toast.makeText(this@MainActivity, "before"+timeStamp.size.toString(), Toast.LENGTH_LONG).show()
-//                        Looper.loop()
-
-//                        if(timeStamp.size == 2)
-//                        {
-//                            Looper.prepare() // to be able to make toast
-//                            Toast.makeText(this@MainActivity, "Added second Time Stamp!", Toast.LENGTH_LONG).show()
-//                            Looper.loop()
-//                        }
                     }
                 }
             }
@@ -916,7 +823,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
-        super.onCreateOptionsMenu(menu!!, inflater)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
