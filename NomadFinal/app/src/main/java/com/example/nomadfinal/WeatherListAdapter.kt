@@ -58,7 +58,11 @@ import com.example.nomadfinal.data.Data
 
             subDescription.text = item.temperature.toString()
 
-            subPic.setImageResource(R.drawable.roadtrip2)
+
+
+            var stringHolder = "oneday"
+
+            subPic.setImageResource(R.drawable.oneday)
 
         }
     }

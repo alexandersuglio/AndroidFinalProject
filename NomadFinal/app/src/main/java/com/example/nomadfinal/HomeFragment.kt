@@ -9,6 +9,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
@@ -28,7 +29,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.system.measureTimeMillis
-
 
 class HomeFragment : Fragment() {
 

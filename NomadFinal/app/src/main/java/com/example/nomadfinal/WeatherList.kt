@@ -4,8 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -69,6 +68,16 @@ class WeatherList: Fragment() {
         //call swipe
         initSwipeLayout(view)
 
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true /* enabled by default */) {
+            override fun handleOnBackPressed() {
+                // Handle the back button event
+
+               // parentFragmentManager.popBackStack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
+
         //view
         return view
     }
@@ -102,7 +111,18 @@ class WeatherList: Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-
+//     fun onBackPressed() {
+//        val fm: FragmentManager? = parentFragmentManager
+//        if (fm != null) {
+//            if (fm.getBackStackEntryCount() > 0) {
+//                Log.i("MainActivity", "popping backstack")
+//                fm.popBackStack()
+//            } else {
+//                Log.i("MainActivity", "nothing on backstack, calling super")
+//                //super.onBackPressed()
+//            }
+//        }
+//    }
 
 
 }
