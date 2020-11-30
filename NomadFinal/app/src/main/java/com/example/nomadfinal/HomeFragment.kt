@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.nomadfinal.data.Data
 import com.firebase.ui.auth.AuthUI
@@ -417,6 +418,14 @@ class HomeFragment : Fragment() {
                                     viewModel.weatherInfo.postValue(dataList)
 
                                     clearVariables()
+
+
+                                    parentFragmentManager.beginTransaction()
+                                            .replace(R.id.main_frame, WeatherList())
+                                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                            .addToBackStack(null)
+                                            .commit()
+
 
                                     ////////
 

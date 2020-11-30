@@ -16,7 +16,7 @@ import com.example.nomadfinal.data.Data
 // NB: Could probably unify with PostRowAdapter if we had two
 // different VH and override getItemViewType
 // https://medium.com/@droidbyme/android-recyclerview-with-multiple-view-type-multiple-view-holder-af798458763b
-abstract class WeatherListAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<WeatherListAdapter.VH>()
+ class WeatherListAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<WeatherListAdapter.VH>()
 {
 
     //instantiate test... something I tried earlier
@@ -40,7 +40,8 @@ abstract class WeatherListAdapter(private val viewModel: MainViewModel) : Recycl
         var subDescription = itemView.findViewById<TextView>(R.id.subRowDetails)
 
         //sub picture
-      //  var subPic = itemView.findViewById<ImageView>(R.id.subRowPic)
+        var subPic = itemView.findViewById<ImageView>(R.id.subRowPic)
+
 
         init
         {
@@ -56,6 +57,8 @@ abstract class WeatherListAdapter(private val viewModel: MainViewModel) : Recycl
             subHead.text = item.location
 
             subDescription.text = item.temperature.toString()
+
+            subPic.setImageResource(R.drawable.roadtrip2)
 
         }
     }
