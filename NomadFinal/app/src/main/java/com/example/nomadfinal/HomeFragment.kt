@@ -30,9 +30,7 @@ import kotlin.system.measureTimeMillis
 
 class HomeFragment : Fragment() {
 
-
     private val viewModel: MainViewModel by activityViewModels()
-
 
     companion object
     {
@@ -41,7 +39,6 @@ class HomeFragment : Fragment() {
             return HomeFragment()
         }
     }
-
 
     private var checkPoint = 1
     private lateinit var geocoder: Geocoder
@@ -54,11 +51,6 @@ class HomeFragment : Fragment() {
     private var dataList:MutableList<Data> = mutableListOf()
     private lateinit var travelTime: String
     private val sysTimeZone = Calendar.getInstance().timeZone.displayName
-
-
-    //private val RC_SIGN_IN = 123 // some arbitrary code
-    private var currentEmail = ""
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -441,8 +433,6 @@ class HomeFragment : Fragment() {
 
                                     clearVariables()
 
-                                    //checkPoint = 1
-
                                     parentFragmentManager.beginTransaction()
                                             .replace(R.id.main_frame, WeatherList())
                                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -473,24 +463,6 @@ class HomeFragment : Fragment() {
                 this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, times) }
 
             departTime.adapter = adapter
-
-//            departTime.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
-//            {
-//                override fun onItemSelected(
-//                    parent: AdapterView<*>,
-//                    view: View?,
-//                    position: Int,
-//                    id: Long
-//                )
-//                {
-//                    //  Toast.makeText(this@MainActivity, getString(R.string.selected_item) + " " + "" + languages[position], Toast.LENGTH_LONG).show()
-//                    Log.d("timePick", times[position])
-//                }
-//
-//                override fun onNothingSelected(parent: AdapterView<*>) {
-//                    // write code to perform some action
-//                }
-//            }
         }
 
 
@@ -526,29 +498,6 @@ class HomeFragment : Fragment() {
         if (sItems != null) {
             sItems.adapter = adapter
         }
-
-//        if (sItems != null) {
-//            sItems.onItemSelectedListener = object : AdapterView.OnItemSelectedListener
-//            {
-//                override fun onItemSelected(
-//                    parent: AdapterView<*>,
-//                    view: View,
-//                    position: Int,
-//                    id: Long
-//                )
-//                {
-//                    Log.d("dayPick", spinnerArray[position])
-//
-//                }
-//
-//                override fun onNothingSelected(parent: AdapterView<*>)
-//                {
-//                    // write code to perform some action
-//                }
-//            }
-//        }
-
-        //Log.d("datalist", dataList.toString())
 
         return view
     }
@@ -862,18 +811,6 @@ class HomeFragment : Fragment() {
 
     /////DEERAJ/////------------------------------------To
 
-
-//    private fun formatTV(name: String, email: String): String {
-//        return """User: $name
-//                  Email: $email"""
-//    }
-
-//    private fun getEmail(email: String): String{
-//        return """Welcome, $email, where are we going today? """
-//    }
-
-
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -893,9 +830,6 @@ class HomeFragment : Fragment() {
                     val intent = Intent(this.context, landing_page::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
-
-
-                   //finish()
                 }
             }
 
