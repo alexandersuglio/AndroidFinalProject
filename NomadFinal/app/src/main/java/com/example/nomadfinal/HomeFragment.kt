@@ -733,7 +733,19 @@ class HomeFragment : Fragment() {
                                     time = java.time.format.DateTimeFormatter.ISO_INSTANT
                                         .format(java.time.Instant.ofEpochSecond(timeValue + offset))
 
-                                    tempKelvin = JSONObject(newJson.getString("temp")).getString("day").toFloat()
+                                    val hour = time.substringAfter("T").substringBefore(":").toInt()
+
+                                    var dayNight = ""
+
+                                    when (hour) {
+                                        in 0..4 -> dayNight = "night"
+                                        in 5..8 -> dayNight = "morn"
+                                        in 9..15 -> dayNight = "day"
+                                        in 16..19 -> dayNight = "eve"
+                                        in 20..23 -> dayNight = "night"
+                                    }
+
+                                    tempKelvin = JSONObject(newJson.getString("temp")).getString(dayNight).toFloat()
 
                                     tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
                                     dataList.add(
