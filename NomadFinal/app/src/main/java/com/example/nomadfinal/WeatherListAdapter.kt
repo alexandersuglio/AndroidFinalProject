@@ -21,20 +21,20 @@ import kotlin.collections.HashMap
     {
 
         //heading
-        var subHead = itemView.findViewById<TextView>(R.id.subRowHeading)
+        private var subHead: TextView = itemView.findViewById(R.id.subRowHeading)
 
 
         //description
-        var subDescription = itemView.findViewById<TextView>(R.id.subRowDetails)
+        var subDescription: TextView = itemView.findViewById(R.id.subRowDetails)
 
-        var time =  itemView.findViewById<TextView>(R.id.time)
+        private var time: TextView =  itemView.findViewById(R.id.time)
 
-        var timeZone =  itemView.findViewById<TextView>(R.id.timeZone)
+        private var timeZone: TextView =  itemView.findViewById(R.id.timeZone)
 
         //sub picture
-        var subPic = itemView.findViewById<ImageView>(R.id.subRowPic)
+        private var subPic: ImageView = itemView.findViewById(R.id.subRowPic)
 
-        var weather = itemView.findViewById<TextView>(R.id.weather)
+        private var weather: TextView = itemView.findViewById(R.id.weather)
 
 
         init
@@ -111,14 +111,12 @@ import kotlin.collections.HashMap
    //on bind view holder method...
     override fun onBindViewHolder(holder: VH, position: Int)
     {
-        //on bind view utilize our observerMediatorLiveData
         viewModel.observeWeather().value?.get(position)?.let{ holder.bind(it) }
     }
 
     //get item count method...
    override fun getItemCount(): Int
     {
-        //on get item utilize our observermediatorLiveDataSubreddit
         return viewModel.observeWeather().value!!.size
     }
 }

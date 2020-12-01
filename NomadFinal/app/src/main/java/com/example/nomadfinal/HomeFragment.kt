@@ -456,7 +456,6 @@ class HomeFragment : Fragment() {
         val times = resources.getStringArray(R.array.Times)
 
         // access the spinner
-        //val spinner = findViewById<Spinner>(R.id.spinner1)
         if (departTime != null)
         {
             val adapter =
@@ -689,7 +688,6 @@ class HomeFragment : Fragment() {
                             }
                         }
                         else if(timeValue > current + 165600 && timeValue <= current + 777600){
-                            //var roundUp = (timeValue - (timeValue % 86400) + 86400)
                             val jsonDataObject = getWeatherInfo(lat, long)
                             val temp = jsonDataObject.getJSONArray("daily")
 
