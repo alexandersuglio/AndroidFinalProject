@@ -1,5 +1,6 @@
 package com.example.nomadfinal
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,13 +13,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.firebase.ui.auth.AuthUI
 
 
-class WeatherList: Fragment() {
-        private val viewM: MainViewModel by activityViewModels()
+class DailyWeatherList: Fragment() {
+    private val viewModel1: MainViewModel by activityViewModels()
 
     companion object
     {
-        fun newInstance(): WeatherList {
-            return WeatherList()
+        fun newInstance(): DailyWeatherList {
+            return DailyWeatherList()
         }
     }
 
@@ -38,23 +39,23 @@ class WeatherList: Fragment() {
         setHasOptionsMenu(true);
 
         //then return view....
-        var view = inflater.inflate(R.layout.fragment_rv, container, false)
+        val view = inflater.inflate(R.layout.fragment_rv, container, false)
 
         //Recycler View
-        var RV = view.findViewById<RecyclerView>(R.id.recyclerView)
+        val RV = view.findViewById<RecyclerView>(R.id.recyclerView)
 
         //adapter
-        var adapter = WeatherListAdapter(viewM)
+        val adapter = DailyWeatherListAdapter(viewModel1)
 
         //adapter hook up
         RV.adapter = adapter
         RV.layoutManager = LinearLayoutManager(context)
 
         //observer
-        viewM.observeWeather().observe(viewLifecycleOwner,
-                {
-                    adapter.notifyDataSetChanged()
-                })
+        viewModel1.observeDailyWeatherData().observe(viewLifecycleOwner,
+            {
+                adapter.notifyDataSetChanged()
+            })
 
         //call swipe
         initSwipeLayout(view)
@@ -89,4 +90,3 @@ class WeatherList: Fragment() {
     }
 
 }
-

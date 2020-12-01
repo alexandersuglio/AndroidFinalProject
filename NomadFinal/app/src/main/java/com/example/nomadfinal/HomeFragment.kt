@@ -12,6 +12,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
+import com.example.nomadfinal.data.DailyWeather
 import com.example.nomadfinal.data.Data
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.textfield.TextInputEditText
@@ -49,6 +50,7 @@ class HomeFragment : Fragment() {
     private var locality: MutableList<String> = mutableListOf()
     private var timeStamp: MutableList<Long>  = mutableListOf()
     private var dataList:MutableList<Data> = mutableListOf()
+    private var dailyWeather:MutableList<DailyWeather> = mutableListOf()
     private lateinit var travelTime: String
     private val sysTimeZone = Calendar.getInstance().timeZone.displayName
 
@@ -603,6 +605,44 @@ class HomeFragment : Fragment() {
                         }
                         else if(timeValue == current || timeValue <= current+3000){
                             val jsonDataObject = getWeatherInfo(lat, long)
+
+                            val temp1 = jsonDataObject.getJSONArray("daily")
+
+                            for(i in 0 until temp1.length()){
+                                val newJson = JSONObject(temp1[i].toString())
+
+                                val weatherCondition1 = JSONObject(
+                                    (newJson.getString("weather")).replace(
+                                        "[",
+                                        ""
+                                    ).replace("]", "")
+                                ).optString("main")
+
+                                val icon1 = JSONObject(
+                                    (newJson.getString("weather")).replace(
+                                        "[",
+                                        ""
+                                    ).replace("]", "")
+                                ).optString("icon")
+
+
+                                val time1 = java.time.format.DateTimeFormatter.ISO_INSTANT
+                                    .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
+
+                                val tempKelvinMax1 = JSONObject(newJson.getString("temp")).getString("max").toFloat()
+
+                                val tempFMax1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                                val tempKelvinMin1 = JSONObject(newJson.getString("temp")).getString("min").toFloat()
+
+                                val tempFMin1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                                dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
+                            }
+
+
+
+
                             tempKelvin = JSONObject(jsonDataObject.getString("current")).optString(
                                 "temp"
                             ).toFloat()
@@ -634,15 +674,50 @@ class HomeFragment : Fragment() {
                                     weatherCondition,
                                     icon,
                                     time,
-                                    timeZone
+                                    timeZone,
+                                    dailyWeather
                                 )
                             )
+                            dailyWeather = mutableListOf()
                             check = 3
                         }
                         else if(timeValue > current+3000 && timeValue <= current + 165600){
                             val roundUp = (timeValue - (timeValue % 3600) + 3600).toString()
                             val jsonDataObject = getWeatherInfo(lat, long)
                             val temp = jsonDataObject.getJSONArray("hourly")
+                            val temp1 = jsonDataObject.getJSONArray("daily")
+
+                            for(i in 0 until temp1.length()){
+                                val newJson = JSONObject(temp1[i].toString())
+
+                                 val weatherCondition1 = JSONObject(
+                                    (newJson.getString("weather")).replace(
+                                        "[",
+                                        ""
+                                    ).replace("]", "")
+                                ).optString("main")
+
+                                 val icon1 = JSONObject(
+                                    (newJson.getString("weather")).replace(
+                                        "[",
+                                        ""
+                                    ).replace("]", "")
+                                ).optString("icon")
+
+
+                                val time1 = java.time.format.DateTimeFormatter.ISO_INSTANT
+                                    .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
+
+                                val tempKelvinMax1 = JSONObject(newJson.getString("temp")).getString("max").toFloat()
+
+                                val tempFMax1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                                val tempKelvinMin1 = JSONObject(newJson.getString("temp")).getString("min").toFloat()
+
+                                val tempFMin1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                                dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
+                            }
 
                             for(i in 0 until temp.length()){
                                 val newJson = JSONObject(temp[i].toString())
@@ -679,9 +754,11 @@ class HomeFragment : Fragment() {
                                             weatherCondition,
                                             icon,
                                             time,
-                                            timeZone
+                                            timeZone,
+                                            dailyWeather
                                         )
                                     )
+                                    dailyWeather = mutableListOf()
                                     check = 3
                                     break
                                 }
@@ -690,6 +767,38 @@ class HomeFragment : Fragment() {
                         else if(timeValue > current + 165600 && timeValue <= current + 777600){
                             val jsonDataObject = getWeatherInfo(lat, long)
                             val temp = jsonDataObject.getJSONArray("daily")
+
+                            for(i in 0 until temp.length()){
+                                val newJson = JSONObject(temp[i].toString())
+
+                                val weatherCondition1 = JSONObject(
+                                    (newJson.getString("weather")).replace(
+                                        "[",
+                                        ""
+                                    ).replace("]", "")
+                                ).optString("main")
+
+                                val icon1 = JSONObject(
+                                    (newJson.getString("weather")).replace(
+                                        "[",
+                                        ""
+                                    ).replace("]", "")
+                                ).optString("icon")
+
+
+                                val time1 = java.time.format.DateTimeFormatter.ISO_INSTANT
+                                    .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
+
+                                val tempKelvinMax1 = JSONObject(newJson.getString("temp")).getString("max").toFloat()
+
+                                val tempFMax1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                                val tempKelvinMin1 = JSONObject(newJson.getString("temp")).getString("min").toFloat()
+
+                                val tempFMin1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                                dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
+                            }
 
                             val firstDate = JSONObject(temp[0].toString()).getString("dt").toLong()
 
@@ -753,9 +862,11 @@ class HomeFragment : Fragment() {
                                             weatherCondition,
                                             icon,
                                             time,
-                                            timeZone
+                                            timeZone,
+                                            dailyWeather
                                         )
                                     )
+                                    dailyWeather = mutableListOf()
                                     check = 3
                                     break
                                 }
@@ -767,6 +878,39 @@ class HomeFragment : Fragment() {
                         else{
 
                             val jsonDataObject = getWeatherInfo(lat, long)
+                            val temp1 = jsonDataObject.getJSONArray("daily")
+
+                            for(i in 0 until temp1.length()){
+                                val newJson = JSONObject(temp1[i].toString())
+
+                                val weatherCondition1 = JSONObject(
+                                    (newJson.getString("weather")).replace(
+                                        "[",
+                                        ""
+                                    ).replace("]", "")
+                                ).optString("main")
+
+                                val icon1 = JSONObject(
+                                    (newJson.getString("weather")).replace(
+                                        "[",
+                                        ""
+                                    ).replace("]", "")
+                                ).optString("icon")
+
+
+                                val time1 = java.time.format.DateTimeFormatter.ISO_INSTANT
+                                    .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
+
+                                val tempKelvinMax1 = JSONObject(newJson.getString("temp")).getString("max").toFloat()
+
+                                val tempFMax1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                                val tempKelvinMin1 = JSONObject(newJson.getString("temp")).getString("min").toFloat()
+
+                                val tempFMin1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                                dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
+                            }
 
                             offset = jsonDataObject.getString("timezone_offset").toLong()
 
@@ -783,9 +927,11 @@ class HomeFragment : Fragment() {
                                     weatherCondition,
                                     icon,
                                     time,
-                                    timeZone
+                                    timeZone,
+                                    dailyWeather
                                 )
                             )
+                            dailyWeather = mutableListOf()
                             check = 3
                         }
                     }
@@ -805,6 +951,7 @@ class HomeFragment : Fragment() {
         locality = mutableListOf()
         timeStamp = mutableListOf()
         dataList = mutableListOf()
+        dailyWeather = mutableListOf()
     }
 
     private suspend fun getTravelTime(s_lat: Double, s_long: Double, e_lat: Double, e_long: Double): JSONObject {

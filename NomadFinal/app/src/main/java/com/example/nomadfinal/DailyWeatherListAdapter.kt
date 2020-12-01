@@ -1,6 +1,5 @@
 package com.example.nomadfinal
 
-
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,11 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
+import com.example.nomadfinal.data.DailyWeather
 import com.example.nomadfinal.data.Data
 import kotlin.collections.HashMap
 
- class WeatherListAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<WeatherListAdapter.VH>()
+class DailyWeatherListAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<DailyWeatherListAdapter.VH>()
 {
 
     private var hashMap:HashMap<String, Int> = HashMap()
@@ -68,7 +68,7 @@ import kotlin.collections.HashMap
                 viewModel.dailyWeatherData.postValue(weatherNewData)
 
                 (itemView.context as FragmentActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frame, DailyWeatherList())
+                    .replace(R.id.main_frame, WeatherList())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .addToBackStack(null)
                     .commit()
@@ -76,12 +76,12 @@ import kotlin.collections.HashMap
             }
         }
 
-        fun bind(item: Data)
+        fun bind(item: DailyWeather)
         {
             subHead.text = item.location
 
             var F = "\u2109"
-            var tempString = item.temperature.toString()
+            var tempString = item.minTemp.toString()
             var totalString = tempString + F
 
             subDescription.text = totalString
@@ -89,26 +89,26 @@ import kotlin.collections.HashMap
 
             hashMap[item.icon]?.let { subPic.setImageResource(it) }
 
-            val date = item.time.substringBefore("T")
-
-            var timeD = item.time.substringAfter("T").substringBefore("Z").dropLast(3)
-
-            val ampM = timeD
-
-            when(ampM.dropLast(3).toInt()){
-                0 -> timeD = "12" + timeD.drop(2) + " AM"
-                12 -> timeD = "$timeD PM"
-                in 1..11 -> timeD += " AM"
-                else -> {
-                    val ab = timeD
-                    val bc = (ab.dropLast(3).toInt() -12).toString()
-                    timeD = bc + timeD.drop(2) + " PM"
-                }
-            }
-
-            time.text = "on $date at $timeD"
-
-            timeZone.text = "Time Zone: " + item.timeZone
+//            val date = item.time.substringBefore("T")
+//
+//            var timeD = item.time.substringAfter("T").substringBefore("Z").dropLast(3)
+//
+//            val ampM = timeD
+//
+//            when(ampM.dropLast(3).toInt()){
+//                0 -> timeD = "12" + timeD.drop(2) + " AM"
+//                12 -> timeD = "$timeD PM"
+//                in 1..11 -> timeD += " AM"
+//                else -> {
+//                    val ab = timeD
+//                    val bc = (ab.dropLast(3).toInt() -12).toString()
+//                    timeD = bc + timeD.drop(2) + " PM"
+//                }
+//            }
+//
+//            time.text = "on $date at $timeD"
+//
+//            timeZone.text = "Time Zone: " + item.timeZone
 
             weather.text = item.weather
 
@@ -123,16 +123,16 @@ import kotlin.collections.HashMap
         return VH(v)
     }
 
-   //on bind view holder method...
+    //on bind view holder method...
     override fun onBindViewHolder(holder: VH, position: Int)
     {
-        viewModel.observeWeather().value?.get(position)?.let{ holder.bind(it) }
+        viewModel.observeDailyWeatherData().value?.get(position)?.let{ holder.bind(it) }
     }
 
     //get item count method...
-   override fun getItemCount(): Int
+    override fun getItemCount(): Int
     {
-        return viewModel.observeWeather().value!!.size
+        return viewModel.observeDailyWeatherData().value!!.size
     }
 }
 
