@@ -55,9 +55,9 @@ class HomeFragment : Fragment() {
     private val sysTimeZone = Calendar.getInstance().timeZone.displayName
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View?
     {
         //inflate fragement layout gives me a view
@@ -182,9 +182,9 @@ class HomeFragment : Fragment() {
 
                 6 -> {
                     Toast.makeText(
-                        this.context,
-                        "Cannot add more checkpoints",
-                        Toast.LENGTH_LONG
+                            this.context,
+                            "Cannot add more checkpoints",
+                            Toast.LENGTH_LONG
                     ).show()
                 }
             }
@@ -194,7 +194,7 @@ class HomeFragment : Fragment() {
             when (checkPoint) {
                 1 -> {
                     Toast.makeText(this.context, "No checkpoints to remove", Toast.LENGTH_LONG)
-                        .show()
+                            .show()
                 }
 
                 2 -> {
@@ -242,7 +242,16 @@ class HomeFragment : Fragment() {
 
         geocoder = Geocoder(this.context)
 
+
+
         submitBut?.setOnClickListener {
+//            val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+//            builder.setMessage("Loading...")
+//            builder.setCancelable(true)
+//
+//            val alert: AlertDialog = builder.create()
+//            alert.show()
+
 
             val dT = departTime?.selectedItem
             val dD = departDate?.selectedItem
@@ -255,23 +264,23 @@ class HomeFragment : Fragment() {
                     if(!startPoint.text.isNullOrEmpty() && !endPoint.text.isNullOrEmpty()){
                         try{
                             location = geocoder.getFromLocationName(
-                                startPoint.text.toString(),
-                                1
+                                    startPoint.text.toString(),
+                                    1
                             )[0]
 
                             location1.add(location)
 
                             location = geocoder.getFromLocationName(
-                                endPoint.text.toString(),
-                                1
+                                    endPoint.text.toString(),
+                                    1
                             )[0]
 
                             location1.add(location)
                         } catch (e: Exception){
                             Toast.makeText(
-                                this.context,
-                                "Please enter a valid Address!",
-                                Toast.LENGTH_LONG
+                                    this.context,
+                                    "Please enter a valid Address!",
+                                    Toast.LENGTH_LONG
                             ).show()
                             clearVariables()
                         }
@@ -289,15 +298,15 @@ class HomeFragment : Fragment() {
 
                     try{
                         location = geocoder.getFromLocationName(
-                            locationList[i - 1]?.text.toString(),
-                            1
+                                locationList[i - 1]?.text.toString(),
+                                1
                         )[0]
                         location1.add(location)
                     } catch (e: Exception){
                         Toast.makeText(
-                            this.context,
-                            "Please enter a valid Address!",
-                            Toast.LENGTH_LONG
+                                this.context,
+                                "Please enter a valid Address!",
+                                Toast.LENGTH_LONG
                         ).show()
                         clearVariables()
                     }
@@ -310,9 +319,9 @@ class HomeFragment : Fragment() {
             if(location1.size != checkPoint+1){
                 Log.d("error", location1.size.toString() + "/" + checkPoint.toString())
                 Toast.makeText(
-                    this.context,
-                    "One or more addresses are Invalid!",
-                    Toast.LENGTH_LONG
+                        this.context,
+                        "One or more addresses are Invalid!",
+                        Toast.LENGTH_LONG
                 ).show()
                 clearVariables()
             } else{
@@ -333,9 +342,9 @@ class HomeFragment : Fragment() {
                 }
                 if(checkUSA != 0){
                     Toast.makeText(
-                        this.context,
-                        "Road trip within the US only!",
-                        Toast.LENGTH_LONG
+                            this.context,
+                            "Road trip within the US only!",
+                            Toast.LENGTH_LONG
                     ).show()
                     clearVariables()
                 } else{
@@ -343,11 +352,11 @@ class HomeFragment : Fragment() {
                     for(i in 1 .. checkPoint){
                         val job2 = CoroutineScope(IO).launch {
                             if(!mapApiRequest(
-                                    locationLat[i - 1],
-                                    locationLong[i - 1],
-                                    locationLat[i],
-                                    locationLong[i]
-                                )) {
+                                            locationLat[i - 1],
+                                            locationLong[i - 1],
+                                            locationLat[i],
+                                            locationLong[i]
+                                    )) {
                                 checkTravelTime++
                             }
                         }
@@ -359,18 +368,18 @@ class HomeFragment : Fragment() {
 
                     if(checkTravelTime !=0){
                         Toast.makeText(
-                            this.context,
-                            "Road trip not possible!",
-                            Toast.LENGTH_LONG
+                                this.context,
+                                "Road trip not possible!",
+                                Toast.LENGTH_LONG
                         ).show()
                         clearVariables()
                     } else{
 
                         if(!(timeStamp.size == locationLat.size && timeStamp.size == locationLong.size && timeStamp.size == locality.size)){
                             Toast.makeText(
-                                this.context,
-                                "Please fill the details correctly!",
-                                Toast.LENGTH_LONG
+                                    this.context,
+                                    "Please fill the details correctly!",
+                                    Toast.LENGTH_LONG
                             ).show()
                             clearVariables()
                         } else {
@@ -378,10 +387,10 @@ class HomeFragment : Fragment() {
                             loop@ for(i in 0 until timeStamp.size){
                                 val job3 = CoroutineScope(IO).launch {
                                     checkWeatherInfo = weatherForecast(
-                                        locationLat[i],
-                                        locationLong[i],
-                                        locality[i],
-                                        timeStamp[i]
+                                            locationLat[i],
+                                            locationLong[i],
+                                            locality[i],
+                                            timeStamp[i]
                                     )
                                 }
                                 runBlocking{
@@ -396,42 +405,42 @@ class HomeFragment : Fragment() {
 
                                 0 -> {
                                     Toast.makeText(
-                                        this.context,
-                                        "Weather Information cannot be found",
-                                        Toast.LENGTH_LONG
+                                            this.context,
+                                            "Weather Information cannot be found",
+                                            Toast.LENGTH_LONG
                                     ).show()
                                     clearVariables()
                                 }
                                 1 -> {
                                     Toast.makeText(
-                                        this.context,
-                                        "Weather Information cannot be found.",
-                                        Toast.LENGTH_LONG
+                                            this.context,
+                                            "Weather Information cannot be found.",
+                                            Toast.LENGTH_LONG
                                     ).show()
                                     clearVariables()
                                 }
                                 2 -> {
                                     Toast.makeText(
-                                        this.context,
-                                        "Please provide future departure time!",
-                                        Toast.LENGTH_LONG
+                                            this.context,
+                                            "Please provide future departure time!",
+                                            Toast.LENGTH_LONG
                                     ).show()
                                     clearVariables()
                                 }
                                 5 -> {
                                     Toast.makeText(
-                                        this.context,
-                                        "Weather Information cannot be found.",
-                                        Toast.LENGTH_LONG
+                                            this.context,
+                                            "Weather Information cannot be found.",
+                                            Toast.LENGTH_LONG
                                     ).show()
                                     clearVariables()
                                 }
                                 else -> {
 
                                     Toast.makeText(
-                                        this.context,
-                                        "Successfully loaded Data!",
-                                        Toast.LENGTH_LONG
+                                            this.context,
+                                            "Successfully loaded Data!",
+                                            Toast.LENGTH_LONG
                                     ).show()
 
                                     Log.d("listLoad", dataList.toString())
@@ -439,6 +448,8 @@ class HomeFragment : Fragment() {
                                     viewModel.weatherInfo.postValue(dataList)
 
                                     clearVariables()
+
+                                    //alert.cancel()
 
                                     parentFragmentManager.beginTransaction()
                                             .replace(R.id.main_frame, WeatherList())
@@ -516,9 +527,9 @@ class HomeFragment : Fragment() {
                 measureTimeMillis {
                     try{
                         val result = JSONObject(
-                            getTravelTime(s_lat, s_long, e_lat, e_long).optString(
-                                "route"
-                            )
+                                getTravelTime(s_lat, s_long, e_lat, e_long).optString(
+                                        "route"
+                                )
                         ).optString("formattedTime")
                         travelTime = result
                     }
@@ -526,10 +537,10 @@ class HomeFragment : Fragment() {
                         Looper.prepare() // to be able to make toast
                         Toast.makeText(
 
-                            //not sure
-                            parentFragment?.context,
-                            "Road trip not possible!",
-                            Toast.LENGTH_LONG
+                                //not sure
+                                this@HomeFragment.context,
+                                "Road trip not possible!",
+                                Toast.LENGTH_LONG
                         ).show()
                         Looper.loop()
                         clearVariables()
@@ -538,10 +549,9 @@ class HomeFragment : Fragment() {
                     if(travelTime == ""){
                         Looper.prepare() // to be able to make toast
                         Toast.makeText(
-                            parentFragment?.context,
-
-                            "Road trip not possible!",
-                            Toast.LENGTH_LONG
+                                this@HomeFragment.context,
+                                "Road trip not possible!",
+                                Toast.LENGTH_LONG
                         ).show()
                         Looper.loop()
                         clearVariables()
@@ -584,10 +594,10 @@ class HomeFragment : Fragment() {
     }
 
     private suspend fun weatherForecast(
-        lat: Double,
-        long: Double,
-        locality: String,
-        timeValue: Long
+            lat: Double,
+            long: Double,
+            locality: String,
+            timeValue: Long
     ):Int{
         var check = 1
         withContext(IO){
@@ -616,17 +626,17 @@ class HomeFragment : Fragment() {
                                 val newJson = JSONObject(temp1[i].toString())
 
                                 val weatherCondition1 = JSONObject(
-                                    (newJson.getString("weather")).replace(
-                                        "[",
-                                        ""
-                                    ).replace("]", "")
+                                        (newJson.getString("weather")).replace(
+                                                "[",
+                                                ""
+                                        ).replace("]", "")
                                 ).optString("main")
 
                                 val icon1 = JSONObject(
-                                    (newJson.getString("weather")).replace(
-                                        "[",
-                                        ""
-                                    ).replace("]", "")
+                                        (newJson.getString("weather")).replace(
+                                                "[",
+                                                ""
+                                        ).replace("]", "")
                                 ).optString("icon")
 
 
@@ -641,14 +651,14 @@ class HomeFragment : Fragment() {
 
                                 val tempFMin1 = ((tempKelvinMin1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
 
-                                dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
+                                dailyWeather.add(DailyWeather(tempFMin1, tempFMax1, weatherCondition1, icon1, time1, locality))
                             }
 
 
 
 
                             tempKelvin = JSONObject(jsonDataObject.getString("current")).optString(
-                                "temp"
+                                    "temp"
                             ).toFloat()
 
                             offset = jsonDataObject.getString("timezone_offset").toLong()
@@ -656,15 +666,15 @@ class HomeFragment : Fragment() {
                             timeZone = jsonDataObject.getString("timezone")
 
                             weatherCondition = JSONObject(
-                                JSONObject(jsonDataObject.getString("current")).optString(
-                                    "weather"
-                                ).replace("[", "").replace("]", "")
+                                    JSONObject(jsonDataObject.getString("current")).optString(
+                                            "weather"
+                                    ).replace("[", "").replace("]", "")
                             ).optString("main")
 
                             icon = JSONObject(
-                                JSONObject(jsonDataObject.getString("current")).optString(
-                                    "weather"
-                                ).replace("[", "").replace("]", "")
+                                    JSONObject(jsonDataObject.getString("current")).optString(
+                                            "weather"
+                                    ).replace("[", "").replace("]", "")
                             ).optString("icon")
 
                             time = java.time.format.DateTimeFormatter.ISO_INSTANT
@@ -672,15 +682,15 @@ class HomeFragment : Fragment() {
 
                             tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
                             dataList.add(
-                                Data(
-                                    locality,
-                                    tempF,
-                                    weatherCondition,
-                                    icon,
-                                    time,
-                                    timeZone,
-                                    dailyWeather
-                                )
+                                    Data(
+                                            locality,
+                                            tempF,
+                                            weatherCondition,
+                                            icon,
+                                            time,
+                                            timeZone,
+                                            dailyWeather
+                                    )
                             )
                             dailyWeather = mutableListOf()
                             check = 3
@@ -695,18 +705,18 @@ class HomeFragment : Fragment() {
                                 val newJson = JSONObject(temp1[i].toString())
 
                                  val weatherCondition1 = JSONObject(
-                                    (newJson.getString("weather")).replace(
-                                        "[",
-                                        ""
-                                    ).replace("]", "")
-                                ).optString("main")
+                                         (newJson.getString("weather")).replace(
+                                                 "[",
+                                                 ""
+                                         ).replace("]", "")
+                                 ).optString("main")
 
                                  val icon1 = JSONObject(
-                                    (newJson.getString("weather")).replace(
-                                        "[",
-                                        ""
-                                    ).replace("]", "")
-                                ).optString("icon")
+                                         (newJson.getString("weather")).replace(
+                                                 "[",
+                                                 ""
+                                         ).replace("]", "")
+                                 ).optString("icon")
 
 
                                 val time1 = java.time.format.DateTimeFormatter.ISO_INSTANT
@@ -720,7 +730,7 @@ class HomeFragment : Fragment() {
 
                                 val tempFMin1 = ((tempKelvinMin1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
 
-                                dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
+                                dailyWeather.add(DailyWeather(tempFMin1, tempFMax1, weatherCondition1, icon1, time1, locality))
                             }
 
                             for(i in 0 until temp.length()){
@@ -731,17 +741,17 @@ class HomeFragment : Fragment() {
                                     timeZone = jsonDataObject.getString("timezone")
 
                                     weatherCondition = JSONObject(
-                                        (newJson.getString("weather")).replace(
-                                            "[",
-                                            ""
-                                        ).replace("]", "")
+                                            (newJson.getString("weather")).replace(
+                                                    "[",
+                                                    ""
+                                            ).replace("]", "")
                                     ).optString("main")
 
                                     icon = JSONObject(
-                                        (newJson.getString("weather")).replace(
-                                            "[",
-                                            ""
-                                        ).replace("]", "")
+                                            (newJson.getString("weather")).replace(
+                                                    "[",
+                                                    ""
+                                            ).replace("]", "")
                                     ).optString("icon")
 
 
@@ -752,15 +762,15 @@ class HomeFragment : Fragment() {
 
                                     tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
                                     dataList.add(
-                                        Data(
-                                            locality,
-                                            tempF,
-                                            weatherCondition,
-                                            icon,
-                                            time,
-                                            timeZone,
-                                            dailyWeather
-                                        )
+                                            Data(
+                                                    locality,
+                                                    tempF,
+                                                    weatherCondition,
+                                                    icon,
+                                                    time,
+                                                    timeZone,
+                                                    dailyWeather
+                                            )
                                     )
                                     dailyWeather = mutableListOf()
                                     check = 3
@@ -776,17 +786,17 @@ class HomeFragment : Fragment() {
                                 val newJson = JSONObject(temp[i].toString())
 
                                 val weatherCondition1 = JSONObject(
-                                    (newJson.getString("weather")).replace(
-                                        "[",
-                                        ""
-                                    ).replace("]", "")
+                                        (newJson.getString("weather")).replace(
+                                                "[",
+                                                ""
+                                        ).replace("]", "")
                                 ).optString("main")
 
                                 val icon1 = JSONObject(
-                                    (newJson.getString("weather")).replace(
-                                        "[",
-                                        ""
-                                    ).replace("]", "")
+                                        (newJson.getString("weather")).replace(
+                                                "[",
+                                                ""
+                                        ).replace("]", "")
                                 ).optString("icon")
 
 
@@ -801,7 +811,7 @@ class HomeFragment : Fragment() {
 
                                 val tempFMin1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
 
-                                dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
+                                dailyWeather.add(DailyWeather(tempFMin1, tempFMax1, weatherCondition1, icon1, time1, locality))
                             }
 
                             val firstDate = JSONObject(temp[0].toString()).getString("dt").toLong()
@@ -827,17 +837,17 @@ class HomeFragment : Fragment() {
                                     timeZone = jsonDataObject.getString("timezone")
 
                                     weatherCondition = JSONObject(
-                                        (newJson.getString("weather")).replace(
-                                            "[",
-                                            ""
-                                        ).replace("]", "")
+                                            (newJson.getString("weather")).replace(
+                                                    "[",
+                                                    ""
+                                            ).replace("]", "")
                                     ).optString("main")
 
                                     icon = JSONObject(
-                                        (newJson.getString("weather")).replace(
-                                            "[",
-                                            ""
-                                        ).replace("]", "")
+                                            (newJson.getString("weather")).replace(
+                                                    "[",
+                                                    ""
+                                            ).replace("]", "")
                                     ).optString("icon")
 
 
@@ -860,15 +870,15 @@ class HomeFragment : Fragment() {
 
                                     tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
                                     dataList.add(
-                                        Data(
-                                            locality,
-                                            tempF,
-                                            weatherCondition,
-                                            icon,
-                                            time,
-                                            timeZone,
-                                            dailyWeather
-                                        )
+                                            Data(
+                                                    locality,
+                                                    tempF,
+                                                    weatherCondition,
+                                                    icon,
+                                                    time,
+                                                    timeZone,
+                                                    dailyWeather
+                                            )
                                     )
                                     dailyWeather = mutableListOf()
                                     check = 3
@@ -888,17 +898,17 @@ class HomeFragment : Fragment() {
                                 val newJson = JSONObject(temp1[i].toString())
 
                                 val weatherCondition1 = JSONObject(
-                                    (newJson.getString("weather")).replace(
-                                        "[",
-                                        ""
-                                    ).replace("]", "")
+                                        (newJson.getString("weather")).replace(
+                                                "[",
+                                                ""
+                                        ).replace("]", "")
                                 ).optString("main")
 
                                 val icon1 = JSONObject(
-                                    (newJson.getString("weather")).replace(
-                                        "[",
-                                        ""
-                                    ).replace("]", "")
+                                        (newJson.getString("weather")).replace(
+                                                "[",
+                                                ""
+                                        ).replace("]", "")
                                 ).optString("icon")
 
 
@@ -913,7 +923,7 @@ class HomeFragment : Fragment() {
 
                                 val tempFMin1 = ((tempKelvinMin1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
 
-                                dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
+                                dailyWeather.add(DailyWeather(tempFMin1, tempFMax1, weatherCondition1, icon1, time1, locality))
                             }
 
                             offset = jsonDataObject.getString("timezone_offset").toLong()
@@ -925,15 +935,15 @@ class HomeFragment : Fragment() {
                                 .format(java.time.Instant.ofEpochSecond(timeValue + offset))
 
                             dataList.add(
-                                Data(
-                                    locality,
-                                    null,
-                                    weatherCondition,
-                                    icon,
-                                    time,
-                                    timeZone,
-                                    dailyWeather
-                                )
+                                    Data(
+                                            locality,
+                                            null,
+                                            weatherCondition,
+                                            icon,
+                                            time,
+                                            timeZone,
+                                            dailyWeather
+                                    )
                             )
                             dailyWeather = mutableListOf()
                             check = 3
