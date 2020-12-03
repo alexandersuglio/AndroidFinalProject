@@ -1,6 +1,5 @@
 package com.example.nomadfinal
 
-
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -65,29 +64,14 @@ import kotlin.collections.HashMap
 
             itemView.setOnClickListener{
 
-
-
-                var weatherNewData = viewModel.observeWeather().value?.get(adapterPosition)?.dailyWeather
+                val weatherNewData = viewModel.observeWeather().value?.get(adapterPosition)?.dailyWeather
 
                 viewModel.dailyWeatherData.postValue(weatherNewData)
 
-
-              //  (itemView.context as FragmentManager).beginTransaction()
-
-
-
-                //(itemView.context as FragmentActivity).supportFragmentManager.beginTransaction()
-
-                //(itemView.context as FragmentManager).beginTransaction()
-
                 (itemView.context as FragmentActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frame, DailyWeatherList())
-                   // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .addToBackStack(null)
                     .commit()
-
-              //  fragmentManager?.apply()
-              //  Log.d("test3", "are you reading this instead?")
 
             }
         }
@@ -96,9 +80,9 @@ import kotlin.collections.HashMap
         {
             subHead.text = item.location
 
-            var F = "\u2109"
-            var tempString = item.temperature.toString()
-            var totalString = tempString + F
+            val F = "\u2109"
+            val tempString = item.temperature.toString()
+            val totalString = tempString + F
 
             subDescription.text = totalString
 

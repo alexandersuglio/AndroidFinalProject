@@ -1,6 +1,4 @@
-//package edu.utap.samplefinal.data
-
-package com.example.nomadfinal
+package com.example.nomadfinal.data
 
 
 import android.util.Log

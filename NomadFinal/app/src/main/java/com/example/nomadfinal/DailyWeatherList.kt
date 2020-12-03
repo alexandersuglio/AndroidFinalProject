@@ -15,45 +15,21 @@ import com.firebase.ui.auth.AuthUI
 
 
 class DailyWeatherList: Fragment() {
+
     private val viewModel1: MainViewModel by activityViewModels()
-
-    companion object
-    {
-        fun newInstance(): DailyWeatherList {
-            return DailyWeatherList()
-        }
-    }
-
-
-//    fun initSwipeLayout(root: View)
-//    {
-//        var swipe = root.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayoutNew)
-//
-//        swipe.setOnRefreshListener {
-//            swipe.isRefreshing = false
-//        }
-//    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        //fragmentManager?.apply()
-        getParentFragmentManager().apply {
-
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
 
         //inflater.inflate(R.layout.activity_splash_page,container, false)
 
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
 
         //then return view....
         val view = inflater.inflate(R.layout.daily_fragment, container, false)
 
 
-        var heading = view.findViewById<TextView>(R.id.headingNew)
+        val heading = view.findViewById<TextView>(R.id.headingNew)
 
         heading.text = "10 Day Weather Forecast For: " + viewModel1.observeDailyWeatherData().value?.get(0)?.location
 
@@ -73,9 +49,6 @@ class DailyWeatherList: Fragment() {
             {
                 adapter.notifyDataSetChanged()
             })
-
-        //call swipe
-      //  initSwipeLayout(view)
 
         //view
         return view

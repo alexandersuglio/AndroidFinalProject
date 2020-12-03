@@ -10,10 +10,10 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.nomadfinal.data.DailyWeather
 import com.example.nomadfinal.data.Data
+import com.example.nomadfinal.data.Request
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -62,7 +62,9 @@ class HomeFragment : Fragment() {
     {
         //inflate fragement layout gives me a view
         //then return view....
-        var view = inflater.inflate(R.layout.activity_main, container, false)
+        val view = inflater.inflate(R.layout.activity_main, container, false)
+
+        /////DEERAJ/////----------------------------From
 
         val addBut = view.findViewById<Button>(R.id.addCheckPoint)
         val remBut = view.findViewById<Button>(R.id.removeCheckPoint)
@@ -85,9 +87,9 @@ class HomeFragment : Fragment() {
         val departTime = view.findViewById<Spinner>(R.id.spinner1)
         val departDate = view.findViewById<Spinner>(R.id.spinner2)
         view.findViewById<TextView>(R.id.timeZoneText)?.text  = sysTimeZone
-        var locationList = listOf(checkText1, checkText2, checkText3, checkText4, checkText5)
+        val locationList = listOf(checkText1, checkText2, checkText3, checkText4, checkText5)
 
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
 
         startLayout.visibility = View.VISIBLE
         endLayout.visibility = View.VISIBLE
@@ -510,8 +512,8 @@ class HomeFragment : Fragment() {
     private suspend fun mapApiRequest(s_lat: Double, s_long: Double, e_lat: Double, e_long: Double): Boolean {
         var check = true
         withContext(IO){
-            val job = launch {
-                val time = measureTimeMillis {
+            launch {
+                measureTimeMillis {
                     try{
                         val result = JSONObject(
                             getTravelTime(s_lat, s_long, e_lat, e_long).optString(
@@ -564,8 +566,8 @@ class HomeFragment : Fragment() {
     private suspend fun checkCountry(lat: Double, long: Double):Boolean{
         var check = false
         withContext(IO){
-            val job = launch {
-                val time = measureTimeMillis {
+            launch {
+                measureTimeMillis {
                     var result = ""
                     try{
                         result = getCountryName(lat, long).getString("countryCode")
@@ -589,8 +591,8 @@ class HomeFragment : Fragment() {
     ):Int{
         var check = 1
         withContext(IO){
-            val job = launch {
-                val time = measureTimeMillis {
+            launch {
+                measureTimeMillis {
                     var tempKelvin: Float? = null
                     var tempF: Int? = null
                     var weatherCondition = ""
@@ -637,7 +639,7 @@ class HomeFragment : Fragment() {
 
                                 val tempKelvinMin1 = JSONObject(newJson.getString("temp")).getString("min").toFloat()
 
-                                val tempFMin1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+                                val tempFMin1 = ((tempKelvinMin1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
 
                                 dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
                             }
@@ -716,7 +718,7 @@ class HomeFragment : Fragment() {
 
                                 val tempKelvinMin1 = JSONObject(newJson.getString("temp")).getString("min").toFloat()
 
-                                val tempFMin1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+                                val tempFMin1 = ((tempKelvinMin1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
 
                                 dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
                             }
@@ -909,7 +911,7 @@ class HomeFragment : Fragment() {
 
                                 val tempKelvinMin1 = JSONObject(newJson.getString("temp")).getString("min").toFloat()
 
-                                val tempFMin1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
+                                val tempFMin1 = ((tempKelvinMin1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
 
                                 dailyWeather.add(DailyWeather(tempFMin1,tempFMax1, weatherCondition1, icon1, time1, locality))
                             }
@@ -956,15 +958,15 @@ class HomeFragment : Fragment() {
         dailyWeather = mutableListOf()
     }
 
-    private suspend fun getTravelTime(s_lat: Double, s_long: Double, e_lat: Double, e_long: Double): JSONObject {
+    private fun getTravelTime(s_lat: Double, s_long: Double, e_lat: Double, e_long: Double): JSONObject {
         return JSONObject(Request("http://www.mapquestapi.com/directions/v2/route?key=A4UUgYYVFNvhyO0HK2vJWPAjjBYHTsGv&from=$s_lat,$s_long&to=$e_lat,$e_long").run())
     }
 
-    private suspend fun getCountryName(lat: Double, long: Double): JSONObject {
+    private fun getCountryName(lat: Double, long: Double): JSONObject {
         return JSONObject(Request("http://api.geonames.org/countryCodeJSON?lat=$lat&lng=$long&username=asuglio").run())
     }
 
-    private suspend fun getWeatherInfo(lat: Double, long: Double): JSONObject {
+    private fun getWeatherInfo(lat: Double, long: Double): JSONObject {
         return JSONObject(Request("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$long&appid=09f73a1fbf8932c02e6b56a252ac594f").run())
     }
 
@@ -978,7 +980,6 @@ class HomeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.signOUT) {
-            // do something here
 
             Log.d("idk", "you definitely clicked me!")
 

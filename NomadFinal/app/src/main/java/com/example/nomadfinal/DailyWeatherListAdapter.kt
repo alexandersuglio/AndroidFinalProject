@@ -61,10 +61,11 @@ class DailyWeatherListAdapter(private val viewModel: MainViewModel) : RecyclerVi
         fun bind(item: DailyWeather)
         {
 
-            var F = "\u2109"
-            var tempStringMin = item.minTemp.toString()
+            val F = "\u2109"
 
-            var tempStringMax = item.maxTemp.toString()
+            val tempStringMin = item.minTemp.toString()
+
+            val tempStringMax = item.maxTemp.toString()
 
             subDescription.text = "High: $tempStringMax$F Low: $tempStringMin$F"
 
@@ -73,7 +74,6 @@ class DailyWeatherListAdapter(private val viewModel: MainViewModel) : RecyclerVi
             time.text = item.time.substringBefore("T")
 
             weather.text = item.weather
-
 
         }
     }
