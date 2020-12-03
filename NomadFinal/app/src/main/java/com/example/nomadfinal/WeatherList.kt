@@ -4,12 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.firebase.ui.auth.AuthUI
+import kotlinx.android.synthetic.main.weather_row.*
 
 
 class WeatherList: Fragment() {
@@ -32,16 +36,22 @@ class WeatherList: Fragment() {
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
 
         setHasOptionsMenu(true);
+
 
         //then return view....
         var view = inflater.inflate(R.layout.fragment_rv, container, false)
 
         //Recycler View
         var RV = view.findViewById<RecyclerView>(R.id.recyclerView)
+
 
         //adapter
         var adapter = WeatherListAdapter(viewM)
@@ -66,6 +76,8 @@ class WeatherList: Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
         super.onCreateOptionsMenu(menu, inflater)
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

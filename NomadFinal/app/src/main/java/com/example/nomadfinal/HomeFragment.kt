@@ -241,6 +241,7 @@ class HomeFragment : Fragment() {
         geocoder = Geocoder(this.context)
 
         submitBut?.setOnClickListener {
+
             val dT = departTime?.selectedItem
             val dD = departDate?.selectedItem
             val epoch = SimpleDateFormat("MM-dd-yyyy HH:mm:ss").parse("$dD $dT:00").time / 1000
@@ -388,7 +389,9 @@ class HomeFragment : Fragment() {
                                     break@loop
                             }
 
+
                             when(checkWeatherInfo){
+
                                 0 -> {
                                     Toast.makeText(
                                         this.context,
@@ -437,7 +440,6 @@ class HomeFragment : Fragment() {
 
                                     parentFragmentManager.beginTransaction()
                                             .replace(R.id.main_frame, WeatherList())
-                                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                             .addToBackStack(null)
                                             .commit()
 

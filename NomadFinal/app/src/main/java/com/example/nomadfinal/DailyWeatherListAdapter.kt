@@ -22,21 +22,15 @@ class DailyWeatherListAdapter(private val viewModel: MainViewModel) : RecyclerVi
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
 
-        //heading
-        private var subHead: TextView = itemView.findViewById(R.id.subRowHeading)
-
-
         //description
-        var subDescription: TextView = itemView.findViewById(R.id.subRowDetails)
+        var subDescription: TextView = itemView.findViewById(R.id.subRowDetailsDaily)
 
-        private var time: TextView =  itemView.findViewById(R.id.time)
-
-        private var timeZone: TextView =  itemView.findViewById(R.id.timeZone)
+        private var time: TextView =  itemView.findViewById(R.id.timeDaily)
 
         //sub picture
-        private var subPic: ImageView = itemView.findViewById(R.id.subRowPic)
+        private var subPic: ImageView = itemView.findViewById(R.id.subRowPicDaily)
 
-        private var weather: TextView = itemView.findViewById(R.id.weather)
+        private var weather: TextView = itemView.findViewById(R.id.weatherDaily)
 
 
         init
@@ -62,55 +56,24 @@ class DailyWeatherListAdapter(private val viewModel: MainViewModel) : RecyclerVi
             hashMap.put("50d", R.drawable.fifty_day)
             hashMap.put("50n", R.drawable.fifty_night)
 
-            itemView.setOnClickListener{
-                var weatherNewData = viewModel.observeWeather().value?.get(adapterPosition)?.dailyWeather
-
-                viewModel.dailyWeatherData.postValue(weatherNewData)
-
-                (itemView.context as FragmentActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frame, WeatherList())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .addToBackStack(null)
-                    .commit()
-
-            }
         }
 
         fun bind(item: DailyWeather)
         {
-            subHead.text = item.location
 
             var F = "\u2109"
-            var tempString = item.minTemp.toString()
-            var totalString = tempString + F
+            var tempStringMin = item.minTemp.toString()
 
-            subDescription.text = totalString
+            var tempStringMax = item.maxTemp.toString()
 
+            subDescription.text = "High: $tempStringMax$F Low: $tempStringMin$F"
 
             hashMap[item.icon]?.let { subPic.setImageResource(it) }
 
-//            val date = item.time.substringBefore("T")
-//
-//            var timeD = item.time.substringAfter("T").substringBefore("Z").dropLast(3)
-//
-//            val ampM = timeD
-//
-//            when(ampM.dropLast(3).toInt()){
-//                0 -> timeD = "12" + timeD.drop(2) + " AM"
-//                12 -> timeD = "$timeD PM"
-//                in 1..11 -> timeD += " AM"
-//                else -> {
-//                    val ab = timeD
-//                    val bc = (ab.dropLast(3).toInt() -12).toString()
-//                    timeD = bc + timeD.drop(2) + " PM"
-//                }
-//            }
-//
-//            time.text = "on $date at $timeD"
-//
-//            timeZone.text = "Time Zone: " + item.timeZone
+            time.text = item.time.substringBefore("T")
 
             weather.text = item.weather
+
 
         }
     }
@@ -119,7 +82,7 @@ class DailyWeatherListAdapter(private val viewModel: MainViewModel) : RecyclerVi
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH
     {
         //layout inflater
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.weather_row, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.daily_weather_row, parent, false)
         return VH(v)
     }
 

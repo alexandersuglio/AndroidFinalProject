@@ -12,14 +12,14 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/weatheridk">
+        android:id="@+id/weatheridkDaily">
+
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center_vertical|start"
-            android:id="@+id/subRowPic"
+            android:id="@+id/subRowPicDaily"
             android:background="@color/colorPrimary"
-
             />
         <LinearLayout
             android:layout_marginTop="20dp"
@@ -28,20 +28,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textSize="18sp"
-                android:id="@+id/subRowHeading"
-                android:text="SAMPLE TITLE"
-                />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textSize="16sp"
-                android:id="@+id/subRowDetails"
+                android:id="@+id/subRowDetailsDaily"
                 android:text="SAMPLE DETAILS"
                 />
 
@@ -50,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textSize="16sp"
-                android:id="@+id/weather"
+                android:id="@+id/weatherDaily"
                 android:text="SAMPLE DETAILS"
                 />
 
@@ -59,16 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textSize="16sp"
-                android:id="@+id/time"
-                android:text="SAMPLE DETAILS"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textSize="16sp"
-                android:id="@+id/timeZone"
+                android:id="@+id/timeDaily"
                 android:text="SAMPLE DETAILS"
                 />
 

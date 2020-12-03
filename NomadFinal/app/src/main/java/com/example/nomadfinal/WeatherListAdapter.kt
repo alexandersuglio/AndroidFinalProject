@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nomadfinal.data.Data
@@ -63,15 +64,30 @@ import kotlin.collections.HashMap
             hashMap.put("50n", R.drawable.fifty_night)
 
             itemView.setOnClickListener{
+
+
+
                 var weatherNewData = viewModel.observeWeather().value?.get(adapterPosition)?.dailyWeather
 
                 viewModel.dailyWeatherData.postValue(weatherNewData)
 
+
+              //  (itemView.context as FragmentManager).beginTransaction()
+
+
+
+                //(itemView.context as FragmentActivity).supportFragmentManager.beginTransaction()
+
+                //(itemView.context as FragmentManager).beginTransaction()
+
                 (itemView.context as FragmentActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frame, DailyWeatherList())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                   // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .addToBackStack(null)
                     .commit()
+
+              //  fragmentManager?.apply()
+              //  Log.d("test3", "are you reading this instead?")
 
             }
         }

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,25 +25,41 @@ class DailyWeatherList: Fragment() {
     }
 
 
-    fun initSwipeLayout(root: View)
-    {
-        var swipe = root.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+//    fun initSwipeLayout(root: View)
+//    {
+//        var swipe = root.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayoutNew)
+//
+//        swipe.setOnRefreshListener {
+//            swipe.isRefreshing = false
+//        }
+//    }
 
-        swipe.setOnRefreshListener {
-            swipe.isRefreshing = false
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        //fragmentManager?.apply()
+        getParentFragmentManager().apply {
+
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
 
+        //inflater.inflate(R.layout.activity_splash_page,container, false)
+
         setHasOptionsMenu(true);
 
         //then return view....
-        val view = inflater.inflate(R.layout.fragment_rv, container, false)
+        val view = inflater.inflate(R.layout.daily_fragment, container, false)
+
+
+        var heading = view.findViewById<TextView>(R.id.headingNew)
+
+        heading.text = "10 Day Weather Forecast For: " + viewModel1.observeDailyWeatherData().value?.get(0)?.location
+
 
         //Recycler View
-        val RV = view.findViewById<RecyclerView>(R.id.recyclerView)
+        val RV = view.findViewById<RecyclerView>(R.id.recyclerViewNew)
 
         //adapter
         val adapter = DailyWeatherListAdapter(viewModel1)
@@ -58,7 +75,7 @@ class DailyWeatherList: Fragment() {
             })
 
         //call swipe
-        initSwipeLayout(view)
+      //  initSwipeLayout(view)
 
         //view
         return view
