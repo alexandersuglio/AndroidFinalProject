@@ -476,7 +476,7 @@ class HomeFragment : Fragment() {
         if (departTime != null)
         {
             val adapter =
-                this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, times) }
+                    this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, times) }
 
             departTime.adapter = adapter
         }
@@ -641,7 +641,7 @@ class HomeFragment : Fragment() {
 
 
                                 val time1 = java.time.format.DateTimeFormatter.ISO_INSTANT
-                                    .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
+                                        .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
 
                                 val tempKelvinMax1 = JSONObject(newJson.getString("temp")).getString("max").toFloat()
 
@@ -678,7 +678,7 @@ class HomeFragment : Fragment() {
                             ).optString("icon")
 
                             time = java.time.format.DateTimeFormatter.ISO_INSTANT
-                                .format(java.time.Instant.ofEpochSecond(timeValue + offset))
+                                    .format(java.time.Instant.ofEpochSecond(timeValue + offset))
 
                             tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
                             dataList.add(
@@ -704,23 +704,23 @@ class HomeFragment : Fragment() {
                             for(i in 0 until temp1.length()){
                                 val newJson = JSONObject(temp1[i].toString())
 
-                                 val weatherCondition1 = JSONObject(
-                                         (newJson.getString("weather")).replace(
-                                                 "[",
-                                                 ""
-                                         ).replace("]", "")
-                                 ).optString("main")
+                                val weatherCondition1 = JSONObject(
+                                        (newJson.getString("weather")).replace(
+                                                "[",
+                                                ""
+                                        ).replace("]", "")
+                                ).optString("main")
 
-                                 val icon1 = JSONObject(
-                                         (newJson.getString("weather")).replace(
-                                                 "[",
-                                                 ""
-                                         ).replace("]", "")
-                                 ).optString("icon")
+                                val icon1 = JSONObject(
+                                        (newJson.getString("weather")).replace(
+                                                "[",
+                                                ""
+                                        ).replace("]", "")
+                                ).optString("icon")
 
 
                                 val time1 = java.time.format.DateTimeFormatter.ISO_INSTANT
-                                    .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
+                                        .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
 
                                 val tempKelvinMax1 = JSONObject(newJson.getString("temp")).getString("max").toFloat()
 
@@ -756,7 +756,7 @@ class HomeFragment : Fragment() {
 
 
                                     time = java.time.format.DateTimeFormatter.ISO_INSTANT
-                                        .format(java.time.Instant.ofEpochSecond(timeValue + offset))
+                                            .format(java.time.Instant.ofEpochSecond(timeValue + offset))
 
                                     tempKelvin = newJson.getString("temp").toFloat()
 
@@ -801,7 +801,7 @@ class HomeFragment : Fragment() {
 
 
                                 val time1 = java.time.format.DateTimeFormatter.ISO_INSTANT
-                                    .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
+                                        .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
 
                                 val tempKelvinMax1 = JSONObject(newJson.getString("temp")).getString("max").toFloat()
 
@@ -852,7 +852,7 @@ class HomeFragment : Fragment() {
 
 
                                     time = java.time.format.DateTimeFormatter.ISO_INSTANT
-                                        .format(java.time.Instant.ofEpochSecond(timeValue + offset))
+                                            .format(java.time.Instant.ofEpochSecond(timeValue + offset))
 
                                     val hour = time.substringAfter("T").substringBefore(":").toInt()
 
@@ -913,7 +913,7 @@ class HomeFragment : Fragment() {
 
 
                                 val time1 = java.time.format.DateTimeFormatter.ISO_INSTANT
-                                    .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
+                                        .format(java.time.Instant.ofEpochSecond(newJson.getString("dt").toLong()))
 
                                 val tempKelvinMax1 = JSONObject(newJson.getString("temp")).getString("max").toFloat()
 
@@ -932,7 +932,7 @@ class HomeFragment : Fragment() {
 
 
                             time = java.time.format.DateTimeFormatter.ISO_INSTANT
-                                .format(java.time.Instant.ofEpochSecond(timeValue + offset))
+                                    .format(java.time.Instant.ofEpochSecond(timeValue + offset))
 
                             dataList.add(
                                     Data(

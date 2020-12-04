@@ -19,14 +19,15 @@
             android:layout_height="150dp"
             android:layout_gravity="center_vertical|start"
             android:id="@+id/subRowPicDaily"
-            android:background="@color/colorPrimary"
+            android:background="@color/test2"
             />
         <LinearLayout
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="20dp"
             >
 
             <TextView

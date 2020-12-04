@@ -13,20 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/weatheridk">
+
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center_vertical|start"
             android:id="@+id/subRowPic"
-            android:background="@color/colorPrimary"
-
+            android:background="@color/test2"
             />
+
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="15dp"
             >
             <TextView
                 android:layout_width="match_parent"
