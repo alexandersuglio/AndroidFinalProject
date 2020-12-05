@@ -8,7 +8,7 @@
     tools:context=".MainActivity"
     >
 
-    
+
     <ScrollView
         android:id="@+id/topScroll"
         android:layout_width="match_parent"

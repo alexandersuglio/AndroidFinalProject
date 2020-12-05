@@ -15,8 +15,8 @@
         android:id="@+id/weatheridkDaily">
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_vertical|start"
             android:id="@+id/subRowPicDaily"
             android:background="@color/test2"

@@ -75,6 +75,8 @@ class DailyWeatherListAdapter(private val viewModel: MainViewModel) : RecyclerVi
 
             weather.text = item.weather
 
+           // if (time.text < )
+
         }
     }
 

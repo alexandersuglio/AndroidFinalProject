@@ -78,7 +78,7 @@ import kotlin.collections.HashMap
 
         fun bind(item: Data)
         {
-            subHead.text = item.location
+            subHead.text = "Locality: " + item.location
 
             val F = "\u2109"
             val tempString = item.temperature.toString()

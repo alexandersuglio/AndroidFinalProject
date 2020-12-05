@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="test"> #4656B0 </color>
+
     <color name="test2">#56CAFF</color>
+    <color name="test3">#5D6970</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
