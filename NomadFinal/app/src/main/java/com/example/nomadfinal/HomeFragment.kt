@@ -264,20 +264,25 @@ class HomeFragment : Fragment() {
                 if (endPoint != null) {
                     if(!startPoint.text.isNullOrEmpty() && !endPoint.text.isNullOrEmpty()){
                         try{
+                            //getting the location details of the start point using the geocoder object
                             location = geocoder.getFromLocationName(
                                     startPoint.text.toString(),
                                     1
                             )[0]
 
+                            //adding the location value to the list created earlier to grab the information when required
                             location1.add(location)
 
+                            //getting the location details of the end point using the geocoder object
                             location = geocoder.getFromLocationName(
                                     endPoint.text.toString(),
                                     1
                             )[0]
 
+                            //adding the location value to the list created earlier to grab the information when required
                             location1.add(location)
                         } catch (e: Exception){
+                            //If something is wrong with the typed address, the code will reach this catch with the excpetion message.
                             Toast.makeText(
                                     this.context,
                                     "Please enter a valid Address!",
@@ -287,12 +292,14 @@ class HomeFragment : Fragment() {
                         }
 
                     } else {
+                        //If start point or end point is null, then the code reaches this else statement
                         Toast.makeText(this.context, "Address is blank!", Toast.LENGTH_LONG).show()
                         clearVariables()
                     }
                 }
             }
 
+            // Based on the number of extra stops, each locations value will be grabbed and store in the location1 list
             for(i in 1 until checkPoint){
                 if(locationList[i - 1]?.text.toString().isNotEmpty()){
                     Log.d("I am here", location1.size.toString() + "/" + checkPoint.toString())
@@ -312,11 +319,14 @@ class HomeFragment : Fragment() {
                         clearVariables()
                     }
                 } else{
+                    //If any stop is null, then the code reaches this else statement
                     Toast.makeText(this.context, "Address is blank!", Toast.LENGTH_LONG).show()
                     clearVariables()
                 }
             }
 
+            // If somehow the list of location1 doesn't have correct number of elements
+            // that user gave in the text field, this Toast message is showed.
             if(location1.size != checkPoint+1){
                 Log.d("error", location1.size.toString() + "/" + checkPoint.toString())
                 Toast.makeText(
@@ -376,6 +386,7 @@ class HomeFragment : Fragment() {
                         clearVariables()
                     } else{
 
+                        // All the list sizes should match, otherwise there will be an error
                         if(!(timeStamp.size == locationLat.size && timeStamp.size == locationLong.size && timeStamp.size == locality.size)){
                             Toast.makeText(
                                     this.context,
@@ -386,6 +397,7 @@ class HomeFragment : Fragment() {
                         } else {
                             var checkWeatherInfo = 0
                             loop@ for(i in 0 until timeStamp.size){
+                                //Getting the WeatherInfo using a background thread as the network call cannot be handled in the Main Thread.
                                 val job3 = CoroutineScope(IO).launch {
                                     checkWeatherInfo = weatherForecast(
                                             locationLat[i],
@@ -394,14 +406,20 @@ class HomeFragment : Fragment() {
                                             timeStamp[i]
                                     )
                                 }
+                                // We are doing a join to the job that is running in the background because we have to be
+                                // done with the whole method to use that information later in the code.
                                 runBlocking{
                                     job3.join()
                                 }
+
+                                // If the returned value of the checkWeatherInfo is 1,2 or 3, we can break the loop.
+                                // This means that something is wrong with the information or the locations given
                                 if(checkWeatherInfo == 1 || checkWeatherInfo == 2 || checkWeatherInfo == 5)
                                     break@loop
                             }
 
-
+                            // Based on the returned value, we will either show the message to the user or move
+                            // to the next fragment if the information is successfully received.
                             when(checkWeatherInfo){
 
                                 0 -> {
@@ -446,12 +464,13 @@ class HomeFragment : Fragment() {
 
                                     Log.d("listLoad", dataList.toString())
 
+                                    // Posting the received data to the weatherInfo variable in the MainViewModel
                                     viewModel.weatherInfo.postValue(dataList)
 
+                                    //Cleaing the lists because we already posted the value to the weatherInfo and can be observed later.
                                     clearVariables()
 
-                                    //alert.cancel()
-
+                                    // Moving to the WeatherList fragment to show the Weather information for the locations that user wanted to check.
                                     parentFragmentManager.beginTransaction()
                                             .replace(R.id.main_frame, WeatherList())
                                             .addToBackStack(null)
@@ -463,14 +482,13 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-
-
         }
 
 
         /////DEERAJ/////----------------------------To
 
 
+        // Using getSting Array to get the times in 24-hour format for the Time Spinner
         val times = resources.getStringArray(R.array.Times)
 
         // access the spinner
