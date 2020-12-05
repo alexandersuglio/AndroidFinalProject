@@ -27,10 +27,6 @@ class landing_page :  AppCompatActivity() {
 
             Log.d("login", "you clicked login button!")
 
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//            finish()
-
             setContentView(R.layout.activity_splash_page)
 
             startActivityForResult(
@@ -39,8 +35,6 @@ class landing_page :  AppCompatActivity() {
                 .setAvailableProviders(providers).build(), RC_SIGN_IN)
 
         }
-
-
     }
 
     private fun getEmail(email: String): String{
@@ -74,12 +68,6 @@ class landing_page :  AppCompatActivity() {
                 //greeting toast
                 Toast.makeText(this, user!!.email?.let { getEmail(email = it) }, Toast.LENGTH_SHORT).show()
 
-
-                // userTV.text = formatTV(name, currentEmail)
-                //temp
-                //greeting.text = getEmail(currentEmail)
-                //setContentView(R.layout.activity_main)
-
             }
 
             else
@@ -87,7 +75,7 @@ class landing_page :  AppCompatActivity() {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
-                // ...
+
                 Log.d("ERROR", "Sign in failed")
 
                 val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
@@ -97,10 +85,6 @@ class landing_page :  AppCompatActivity() {
                     // User pressed back button. NOTE: This is where the back action is
                     //taken care of
 
-//                    val intent = Intent(this, landing_page::class.java)
-//                    startActivity(intent)
-//                    finish()
-
                     setContentView(R.layout.activity_landing_page)
 
                     val view = findViewById<Button>(R.id.Login)
@@ -108,10 +92,6 @@ class landing_page :  AppCompatActivity() {
                     view.setOnClickListener {
 
                         Log.d("login", "you clicked login button!")
-
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//            finish()
 
                         setContentView(R.layout.activity_splash_page)
 

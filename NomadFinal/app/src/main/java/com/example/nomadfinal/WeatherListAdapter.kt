@@ -15,25 +15,22 @@ import kotlin.collections.HashMap
 
  class WeatherListAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<WeatherListAdapter.VH>()
 {
-
+    // Using hashmap to hold the drawables for a particular icon name.
+    // This makes it easier to grab the correct drawable.
     private var hashMap:HashMap<String, Int> = HashMap()
 
     // ViewHolder pattern minimizes calls to findViewById
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
 
-        //heading
         private var subHead: TextView = itemView.findViewById(R.id.subRowHeading)
 
-
-        //description
         var subDescription: TextView = itemView.findViewById(R.id.subRowDetails)
 
         private var time: TextView =  itemView.findViewById(R.id.time)
 
         private var timeZone: TextView =  itemView.findViewById(R.id.timeZone)
 
-        //sub picture
         private var subPic: ImageView = itemView.findViewById(R.id.subRowPic)
 
         private var weather: TextView = itemView.findViewById(R.id.weather)
@@ -62,12 +59,18 @@ import kotlin.collections.HashMap
             hashMap.put("50d", R.drawable.fifty_day)
             hashMap.put("50n", R.drawable.fifty_night)
 
+
+            // OnClick Listener for each element in the Weather List to show the
+            // 10-day Weather forecast of the location that was clicked.
             itemView.setOnClickListener{
 
+                //Observing the LivaData of dailyWeather for particular location that was clicked
                 val weatherNewData = viewModel.observeWeather().value?.get(adapterPosition)?.dailyWeather
 
+                // posting the data of current location to the dailyWeatherData to observe it later while showing to the user.
                 viewModel.dailyWeatherData.postValue(weatherNewData)
 
+                // Moving to the DailyWeatherList Fragment to handle the 10-day Weather forecast
                 (itemView.context as FragmentActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frame, DailyWeatherList())
                     .addToBackStack(null)

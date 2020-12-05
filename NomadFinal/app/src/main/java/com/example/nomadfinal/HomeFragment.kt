@@ -31,6 +31,7 @@ import kotlin.system.measureTimeMillis
 
 class HomeFragment : Fragment() {
 
+    //Using val viewModel to post the Live data of Weather information to the MainViewModel
     private val viewModel: MainViewModel by activityViewModels()
 
     companion object
@@ -41,6 +42,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    //initializing the Member variables Required for getting the Weather and posting it to MainViewModel
     private var checkPoint = 1
     private lateinit var geocoder: Geocoder
     private lateinit var location: Address
@@ -60,12 +62,12 @@ class HomeFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View?
     {
-        //inflate fragement layout gives me a view
-        //then return view....
+        //inflate fragment layout gives a view
         val view = inflater.inflate(R.layout.activity_main, container, false)
 
         /////DEERAJ/////----------------------------From
 
+        // Getting all the Text Fields and Buttons from the activity_main
         val addBut = view.findViewById<Button>(R.id.addCheckPoint)
         val remBut = view.findViewById<Button>(R.id.removeCheckPoint)
         val checkText1 = view.findViewById<TextInputEditText>(R.id.check_1)
@@ -89,14 +91,18 @@ class HomeFragment : Fragment() {
         view.findViewById<TextView>(R.id.timeZoneText)?.text  = sysTimeZone
         val locationList = listOf(checkText1, checkText2, checkText3, checkText4, checkText5)
 
+        //Setting the option menu to true to make the Sign out button visible
         setHasOptionsMenu(true)
 
+        //Setting the visibility of startPoint and EndPoint as these fields are always required.
         startLayout.visibility = View.VISIBLE
         endLayout.visibility = View.VISIBLE
 
         departText.text = "Depart Time:"
         departText.setTypeface(null, Typeface.BOLD)
 
+        // When the back button is pressed in the Next Fragments, the text fields should
+        // be visible based on the previously clicked buttons.
         when(checkPoint){
             1 -> {
                 check1.visibility = View.INVISIBLE
@@ -143,6 +149,7 @@ class HomeFragment : Fragment() {
 
         }
 
+        // Handling the Add Stop Button based on the previous checkPoint value, the text filed will be made visible.
         addBut?.setOnClickListener {
             when (checkPoint) {
                 1 -> {
@@ -190,6 +197,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Handling the Add Stop Button based on the previous checkPoint value, the text filed will be made invisible.
         remBut?.setOnClickListener {
             when (checkPoint) {
                 1 -> {
@@ -240,18 +248,11 @@ class HomeFragment : Fragment() {
         }
 
 
+        // Using geocoder object to get the location details of the typed Address
         geocoder = Geocoder(this.context)
 
-
-
+        //Handling the onclicklistener for the button "Get Weather Info"
         submitBut?.setOnClickListener {
-//            val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
-//            builder.setMessage("Loading...")
-//            builder.setCancelable(true)
-//
-//            val alert: AlertDialog = builder.create()
-//            alert.show()
-
 
             val dT = departTime?.selectedItem
             val dD = departDate?.selectedItem
@@ -958,6 +959,7 @@ class HomeFragment : Fragment() {
         return check
     }
 
+    // This method is empty all the lists that are created earlier to start the computing from beginning.
     private fun clearVariables() {
         location1 = mutableListOf()
         locationLat = mutableListOf()
@@ -968,25 +970,30 @@ class HomeFragment : Fragment() {
         dailyWeather = mutableListOf()
     }
 
+    // This method returns the JSON Object of data collected from the mapquest api. This is mainly to find out the travel time between 2 locations.
     private fun getTravelTime(s_lat: Double, s_long: Double, e_lat: Double, e_long: Double): JSONObject {
         return JSONObject(Request("http://www.mapquestapi.com/directions/v2/route?key=A4UUgYYVFNvhyO0HK2vJWPAjjBYHTsGv&from=$s_lat,$s_long&to=$e_lat,$e_long").run())
     }
 
+    //This method returns the JSON Object of data collected from geonames api. This is mainly yo find out weather a location is in USA or not.
     private fun getCountryName(lat: Double, long: Double): JSONObject {
         return JSONObject(Request("http://api.geonames.org/countryCodeJSON?lat=$lat&lng=$long&username=asuglio").run())
     }
 
+    //This method is to return the JSON Object of weather information for a location that the user is interested in.
     private fun getWeatherInfo(lat: Double, long: Double): JSONObject {
         return JSONObject(Request("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$long&appid=09f73a1fbf8932c02e6b56a252ac594f").run())
     }
 
     /////DEERAJ/////------------------------------------To
 
+    //getting the main_menu using the inflater
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    //handling the sign out button on the top right corner
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.signOUT) {

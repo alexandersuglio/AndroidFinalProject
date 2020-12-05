@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Moving to HomeFragment from MainActivity. Home Fragment has the main screen
         supportFragmentManager
             .beginTransaction()
             .add(R.id.main_frame, HomeFragment.newInstance())

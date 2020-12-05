@@ -14,8 +14,10 @@ import com.firebase.ui.auth.AuthUI
 
 class WeatherList: Fragment() {
 
+    //Using val viewMto observe the Live data of weatherInfo from the MainViewModel
     private val viewM: MainViewModel by activityViewModels()
 
+    //As we do not require swipe refresh, we are setting the refresh listener to false
     private fun initSwipeLayout(root: View)
     {
         val swipe = root.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
@@ -28,42 +30,43 @@ class WeatherList: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
 
+        //Setting the option menu to true to make the Sign out button visible
         setHasOptionsMenu(true)
 
-        //then return view....
+        //Inflating the layout from created fragment_rv
         val view = inflater.inflate(R.layout.fragment_rv, container, false)
 
-        //Recycler View
+        // Getting the Recycler View for showing the Weather for every location
         val RV = view.findViewById<RecyclerView>(R.id.recyclerView)
 
 
-        //adapter
+        //passing the viewM to Adapter created specifically for handling the Weather information for every location.
         val adapter = WeatherListAdapter(viewM)
 
         //adapter hook up
         RV.adapter = adapter
         RV.layoutManager = LinearLayoutManager(context)
 
-        //observer
+        //Hooking up the adapter and getting the layout manager for the current context
         viewM.observeWeather().observe(viewLifecycleOwner,
                 {
                     adapter.notifyDataSetChanged()
                 })
 
-        //call swipe
+        //call swipe function to handle the Swipe Refresh
         initSwipeLayout(view)
 
-        //view
+        //returning the final view
         return view
     }
 
+    //getting the main_menu using the inflater
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
         super.onCreateOptionsMenu(menu, inflater)
-
-
     }
 
+    //handling the sign out button on the top right corner
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.signOUT) {
@@ -79,7 +82,6 @@ class WeatherList: Fragment() {
                     startActivity(intent)
                 }
             }
-
         }
         return super.onOptionsItemSelected(item)
     }

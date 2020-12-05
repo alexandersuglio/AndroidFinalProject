@@ -16,18 +16,19 @@ import kotlin.collections.HashMap
 class DailyWeatherListAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<DailyWeatherListAdapter.VH>()
 {
 
+    // Using hashmap to hold the drawables for a particular icon name.
+    // This makes it easier to grab the correct drawable.
     private var hashMap:HashMap<String, Int> = HashMap()
 
     // ViewHolder pattern minimizes calls to findViewById
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
 
-        //description
+
         var subDescription: TextView = itemView.findViewById(R.id.subRowDetailsDaily)
 
         private var time: TextView =  itemView.findViewById(R.id.timeDaily)
 
-        //sub picture
         private var subPic: ImageView = itemView.findViewById(R.id.subRowPicDaily)
 
         private var weather: TextView = itemView.findViewById(R.id.weatherDaily)
@@ -74,8 +75,6 @@ class DailyWeatherListAdapter(private val viewModel: MainViewModel) : RecyclerVi
             time.text = item.time.substringBefore("T")
 
             weather.text = item.weather
-
-           // if (time.text < )
 
         }
     }
