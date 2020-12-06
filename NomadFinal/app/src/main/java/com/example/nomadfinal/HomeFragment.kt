@@ -525,6 +525,7 @@ class HomeFragment : Fragment() {
         spinnerArray.add(idk4)
         spinnerArray.add(idk5)
 
+        // Adapter for Drop down spinner
         val adapter = this.context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, spinnerArray) }
 
         adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -534,11 +535,14 @@ class HomeFragment : Fragment() {
             sItems.adapter = adapter
         }
 
+        // Finally returning view after all the initialisations.
         return view
     }
 
     /////DEERAJ/////----------------------------From
 
+    // mapApiRequest method is to find the travel time between the locations and
+    // store the timestamp value of the time when the trip will reach that particular location.
     private suspend fun mapApiRequest(s_lat: Double, s_long: Double, e_lat: Double, e_long: Double): Boolean {
         var check = true
         withContext(IO){
@@ -553,10 +557,11 @@ class HomeFragment : Fragment() {
                         travelTime = result
                     }
                     catch (e: java.lang.Exception){
-                        Looper.prepare() // to be able to make toast
+                        Looper.prepare() // to be able to make toast inside the coroutine scope
                         Toast.makeText(
 
-                                //not sure
+                                //If the user selects a place to or from where the road trip
+                                // is not possible(for example: a place in Hawaii)
                                 this@HomeFragment.context,
                                 "Road trip not possible!",
                                 Toast.LENGTH_LONG
@@ -567,6 +572,10 @@ class HomeFragment : Fragment() {
                     }
                     if(travelTime == ""){
                         Looper.prepare() // to be able to make toast
+
+                        // If we do not get any result back from the JSON Object, it means
+                        // that the road trip is not possible between the locations and then
+                        // we can show the user a message that the road trip is not possible.
                         Toast.makeText(
                                 this@HomeFragment.context,
                                 "Road trip not possible!",
@@ -577,6 +586,9 @@ class HomeFragment : Fragment() {
                         check = false
                     }
                     else{
+
+                        //To get the previous location's time stamp value and use it to add the
+                        // travel time to it to get the next location's time stamp value
                         val previousTime = (timeStamp.last())
 
                         val hoursMin = travelTime.split(":")
@@ -589,9 +601,12 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+        // The boolean value of var check will be true if the timestamp is added successfully.
+        // If there is any problem in getting the timestamp, the boolean value to be returned will be false.
         return check
     }
 
+    // This function is to check the country that the location is in.
     private suspend fun checkCountry(lat: Double, long: Double):Boolean{
         var check = false
         withContext(IO){
@@ -599,10 +614,12 @@ class HomeFragment : Fragment() {
                 measureTimeMillis {
                     var result = ""
                     try{
+                        // The country value of the location will be passed to result and will be checked for US later.
                         result = getCountryName(lat, long).getString("countryCode")
                     }
                     catch (e: Exception) {
                     }
+                    // Only if the result is US, the boolean value of check will change to true.
                     if(result == "US") {
                         check = true
                     }
@@ -612,6 +629,9 @@ class HomeFragment : Fragment() {
         return check
     }
 
+    // This function is to retrieve the weather forecast of all the locations and it takes the
+    // latitude, longitude, locality and time as the input parameters and returns
+    // the Int value(this value will be checked later to find out whether the information is retrieved or not)
     private suspend fun weatherForecast(
             lat: Double,
             long: Double,
@@ -630,17 +650,26 @@ class HomeFragment : Fragment() {
                     var timeZone = ""
                     var offset = 0L
                     try{
+                        // Getting the current time to check whether the time that was given in the
+                        // depart time is after the current time or not.
                         val current = System.currentTimeMillis()/1000
 
+                        // As we will not be able to receive the weather information for the location
+                        // if the time is past, we cannot provide the details to the user.
                         if(timeValue < current)
                         {
                             check = 2
                         }
+
+                        // If time selected is exactly the current time, we can get the weather
+                        // info from the API by selecting the JSON data of "current"
                         else if(timeValue == current || timeValue <= current+3000){
                             val jsonDataObject = getWeatherInfo(lat, long)
 
                             val temp1 = jsonDataObject.getJSONArray("daily")
 
+                            // Looping through the 10-day forecast for a particular location as we need
+                            // to insert this data in the dataList mutable list later.
                             for(i in 0 until temp1.length()){
                                 val newJson = JSONObject(temp1[i].toString())
 
@@ -664,17 +693,17 @@ class HomeFragment : Fragment() {
 
                                 val tempKelvinMax1 = JSONObject(newJson.getString("temp")).getString("max").toFloat()
 
+                                // Converting the temperature from Kelvin to Fahrenheit
                                 val tempFMax1 = ((tempKelvinMax1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
 
                                 val tempKelvinMin1 = JSONObject(newJson.getString("temp")).getString("min").toFloat()
 
+                                // Converting the temperature from Kelvin to Fahrenheit
                                 val tempFMin1 = ((tempKelvinMin1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
 
+                                // Adding the collected information for 10-day forecast for each day into a mutable list of dailyWeather.
                                 dailyWeather.add(DailyWeather(tempFMin1, tempFMax1, weatherCondition1, icon1, time1, locality))
                             }
-
-
-
 
                             tempKelvin = JSONObject(jsonDataObject.getString("current")).optString(
                                     "temp"
@@ -696,10 +725,14 @@ class HomeFragment : Fragment() {
                                     ).replace("[", "").replace("]", "")
                             ).optString("icon")
 
+                            // Getting the time value and adding offset to get the exact time when the trip will reach the location.
                             time = java.time.format.DateTimeFormatter.ISO_INSTANT
                                     .format(java.time.Instant.ofEpochSecond(timeValue + offset))
 
+                            // Converting the temperature from Kelvin to Fahrenheit
                             tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                            //Adding all the values of Data class into the mutable list dataList
                             dataList.add(
                                     Data(
                                             locality,
@@ -711,15 +744,23 @@ class HomeFragment : Fragment() {
                                             dailyWeather
                                     )
                             )
+
+                            // As soon as we insert the dailyWeather information in the dataList, we make
+                            // it empty for the next location to insert data into dailyWeather mutable list.
                             dailyWeather = mutableListOf()
                             check = 3
                         }
+
+                        // If time is in next 48 hours, we can get the weather
+                        // info from the API by selecting the JSON data of "hourly"
                         else if(timeValue > current+3000 && timeValue <= current + 165600){
                             val roundUp = (timeValue - (timeValue % 3600) + 3600).toString()
                             val jsonDataObject = getWeatherInfo(lat, long)
                             val temp = jsonDataObject.getJSONArray("hourly")
                             val temp1 = jsonDataObject.getJSONArray("daily")
 
+                            // Looping through the 10-day forecast for a particular location as we need
+                            // to insert this data in the dataList mutable list later.
                             for(i in 0 until temp1.length()){
                                 val newJson = JSONObject(temp1[i].toString())
 
@@ -749,6 +790,7 @@ class HomeFragment : Fragment() {
 
                                 val tempFMin1 = ((tempKelvinMin1 - 273.15) * 9/5 + 32).toFloat().roundToInt()
 
+                                // Adding the collected information for 10-day forecast for each day into a mutable list of dailyWeather.
                                 dailyWeather.add(DailyWeather(tempFMin1, tempFMax1, weatherCondition1, icon1, time1, locality))
                             }
 
@@ -779,7 +821,10 @@ class HomeFragment : Fragment() {
 
                                     tempKelvin = newJson.getString("temp").toFloat()
 
+                                    // Converting the temperature from Kelvin to Fahrenheit
                                     tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                                    //Adding all the values of Data class into the mutable list dataList
                                     dataList.add(
                                             Data(
                                                     locality,
@@ -791,16 +836,24 @@ class HomeFragment : Fragment() {
                                                     dailyWeather
                                             )
                                     )
+
+                                    // As soon as we insert the dailyWeather information in the dataList, we make
+                                    // it empty for the next location to insert data into dailyWeather mutable list.
                                     dailyWeather = mutableListOf()
                                     check = 3
                                     break
                                 }
                             }
                         }
+
+                        // If time is in next 10 days, we can get the weather
+                        // info from the API by selecting the JSON data of "daily"
                         else if(timeValue > current + 165600 && timeValue <= current + 777600){
                             val jsonDataObject = getWeatherInfo(lat, long)
                             val temp = jsonDataObject.getJSONArray("daily")
 
+                            // Looping through the 10-day forecast for a particular location as we need
+                            // to insert this data in the dataList mutable list later.
                             for(i in 0 until temp.length()){
                                 val newJson = JSONObject(temp[i].toString())
 
@@ -850,6 +903,10 @@ class HomeFragment : Fragment() {
 
                             for(i in 0 until temp.length()){
                                 val newJson = JSONObject(temp[i].toString())
+
+                                // As we will not have weather inforamtion for exact time if we want 10-day weather forecast,
+                                // we will round the value of time to the daily weather time stamp and then get the weather
+                                // using this time stamp by checking for the string value of the time stamp.
                                 if(newJson.getString("dt") == roundUp.toString()){
                                     offset = jsonDataObject.getString("timezone_offset").toLong()
 
@@ -877,6 +934,7 @@ class HomeFragment : Fragment() {
 
                                     var dayNight = ""
 
+                                    // Based on the time in the day, the weather icon image will be selected for day or night
                                     when (hour) {
                                         in 0..4 -> dayNight = "night"
                                         in 5..8 -> dayNight = "morn"
@@ -888,6 +946,8 @@ class HomeFragment : Fragment() {
                                     tempKelvin = JSONObject(newJson.getString("temp")).getString(dayNight).toFloat()
 
                                     tempF = ((tempKelvin - 273.15) * 9/5 + 32).toFloat().roundToInt()
+
+                                    //Adding all the values of Data class into the mutable list dataList
                                     dataList.add(
                                             Data(
                                                     locality,
@@ -899,6 +959,9 @@ class HomeFragment : Fragment() {
                                                     dailyWeather
                                             )
                                     )
+
+                                    // As soon as we insert the dailyWeather information in the dataList, we make
+                                    // it empty for the next location to insert data into dailyWeather mutable list.
                                     dailyWeather = mutableListOf()
                                     check = 3
                                     break
@@ -908,11 +971,16 @@ class HomeFragment : Fragment() {
                                 }
                             }
                         }
+
+                        // If time is more than 10 days from today, we just get the weather
+                        // info from the API by selecting the JSON data of "daily" and provide on this inforamtion.
                         else{
 
                             val jsonDataObject = getWeatherInfo(lat, long)
                             val temp1 = jsonDataObject.getJSONArray("daily")
 
+                            // Looping through the 10-day forecast for a particular location as we need
+                            // to insert this data in the dataList mutable list later.
                             for(i in 0 until temp1.length()){
                                 val newJson = JSONObject(temp1[i].toString())
 
@@ -953,6 +1021,7 @@ class HomeFragment : Fragment() {
                             time = java.time.format.DateTimeFormatter.ISO_INSTANT
                                     .format(java.time.Instant.ofEpochSecond(timeValue + offset))
 
+                            //Adding all the values of Data class into the mutable list dataList
                             dataList.add(
                                     Data(
                                             locality,
@@ -964,6 +1033,9 @@ class HomeFragment : Fragment() {
                                             dailyWeather
                                     )
                             )
+
+                            // As soon as we insert the dailyWeather information in the dataList, we make
+                            // it empty for the next location to insert data into dailyWeather mutable list.
                             dailyWeather = mutableListOf()
                             check = 3
                         }
@@ -974,6 +1046,8 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        // This will return the Int value based on the type of weather information retrieved.
         return check
     }
 
